@@ -1,4 +1,4 @@
-package pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource;
+package pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.POJO.DBConfig;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +9,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix="datasourcetwo.datasource")
 @Getter
 @Setter
-public class SecondDataBaseConfig {
-    private String url;
-    private String password;
-    private String username;
+public class SecondDataBaseConfig extends DataBaseConfig{
 }

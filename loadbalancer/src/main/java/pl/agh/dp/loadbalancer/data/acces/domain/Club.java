@@ -1,6 +1,9 @@
 package pl.agh.dp.loadbalancer.data.acces.domain;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +14,8 @@ import java.util.Date;
 
 
 @Entity
+@Getter
+@Setter
 @Table(name = "clubs")
 public class Club {
 

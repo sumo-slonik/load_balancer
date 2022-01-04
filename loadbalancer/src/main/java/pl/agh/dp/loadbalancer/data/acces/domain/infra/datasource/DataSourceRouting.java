@@ -3,6 +3,8 @@ package pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.stereotype.Component;
+import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.POJO.DBConfig.FirstDataBaseConfig;
+import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.POJO.DBConfig.SecondDataBaseConfig;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
