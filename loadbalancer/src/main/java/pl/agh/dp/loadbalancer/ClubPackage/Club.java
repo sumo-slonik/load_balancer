@@ -13,11 +13,20 @@ import javax.persistence.Table;
 import java.util.Date;
 
 
-@Entity
+@Entity(name = "CLUB")
 @Getter
 @Setter
 @Table(name = "clubs")
 public class Club {
+
+
+    public Club(Object[] object) {
+        this.clubName = (String) object[0];
+        this.city = (String) object[1];
+        this.foundationDate = (Date) object[2];
+        this.club_id = Long.valueOf((int) object[3]);
+        this.province = (String) object[4];
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

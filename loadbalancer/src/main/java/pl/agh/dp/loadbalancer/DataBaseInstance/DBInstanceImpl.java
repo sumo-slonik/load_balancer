@@ -1,9 +1,13 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import org.hibernate.service.spi.ServiceException;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
@@ -13,10 +17,11 @@ import javax.swing.text.StyledEditorKit;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class DBInstanceImpl implements DatabaseInstance{
+public class DBInstanceImpl implements DatabaseInstance {
 
     private final DataBases dataBases;
-    private DataBaseState state;
+    @Setter
+    private DataBaseState state = new DisconnectedState();
     private final DataBaseConnectionConfig dataBaseConnectionConfig;
 
 
@@ -47,30 +52,41 @@ public class DBInstanceImpl implements DatabaseInstance{
 
     @Override
     public void loseConnection() {
+        this.state.loseConnection(this);
 
     }
 
     @Override
     public void getConnection() {
+        this.state.getConnection(this);
 
     }
 
-    private SessionFactory getSessionFactory()
-    {
-         return getConfiguration().buildSessionFactory();
+    @Override
+    public void setState(DataBaseState dataBaseState) {
+        this.state = dataBaseState;
     }
 
-//  tutaj walniesz zamiast selecta swojego comanda
-
-    List<Club> processSelect(String select)
-    {
-        Session session = this.getSession();
-        List<Club> results = session.createSQLQuery(select).list();
-        return results;
+    private SessionFactory getSessionFactory() {
+        return getConfiguration().buildSessionFactory();
     }
 
-    void checkConnection()
-    {
+
+    @Override
+    public void processQuery(String select) {
+        Session session = getSession();
+        NativeQuery result = session.createSQLQuery(select);
+        List clubs = result.list();
+        for(Object c : clubs)
+        {
+            Club club = new Club((Object[]) c);
+            System.out.println(club.toString());
+        }
+
+
+    }
+
+    public void checkConnection() {
         Pinger.checkConnection(this);
     }
 }

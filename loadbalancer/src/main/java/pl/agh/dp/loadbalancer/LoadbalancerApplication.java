@@ -39,12 +39,21 @@ public class LoadbalancerApplication {
                 "org.hibernate.dialect.MySQLDialect");
         DataBaseConnectionConfig dataBaseConnectionConfig2 = new DataBaseConnectionConfig(
                 "com.mysql.cj.jdbc.Driver",
-                "jdbc:mysql://localhost:3306/xdd",
+                "jdbc:mysql://localhost:3306/dp_instance_4",
                 "root",
                 "admin",
                 "org.hibernate.dialect.MySQLDialect");
 
-        DatabaseInstance databaseInstance = new DBInstanceImpl(DataBases.FIRST,dataBaseConnectionConfig1);
+        DatabaseInstance databaseInstance1 = new DBInstanceImpl(DataBases.FIRST,dataBaseConnectionConfig1);
+        DatabaseInstance databaseInstance2 = new DBInstanceImpl(DataBases.SECOND,dataBaseConnectionConfig2);
+        databaseInstance1.checkConnection();
+        databaseInstance2.checkConnection();
+        System.out.println(databaseInstance1.getState());
+        System.out.println(databaseInstance2.getState());
+        //tutaj przyład przekazania sql'a do instancji
+        //niby wszystko działa
+        // ale mapowanie jest zrobione paskudnie jeszcze je poprawię
+        databaseInstance2.processQuery("select * from clubs where province = 'lubelskie'");
         Session test = null;
 
 
