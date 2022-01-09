@@ -1,4 +1,4 @@
-package pl.agh.dp.loadbalancer.data.acces.domain;
+package pl.agh.dp.loadbalancer.ClubPackage;
 
 
 import lombok.Getter;
@@ -36,4 +36,10 @@ public class Club {
     @Column(name = "province")
     String province;
 
+    @Override
+    public String toString() {
+        return "Club{" +
+                "clubName='" + clubName + '\'' +
+                '}';
+    }
 }

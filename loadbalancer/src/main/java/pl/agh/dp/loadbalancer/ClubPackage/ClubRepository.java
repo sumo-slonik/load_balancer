@@ -1,7 +1,6 @@
-package pl.agh.dp.loadbalancer.data.acces.domain;
+package pl.agh.dp.loadbalancer.ClubPackage;
 
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

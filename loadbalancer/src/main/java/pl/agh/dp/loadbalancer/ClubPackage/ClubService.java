@@ -1,7 +1,7 @@
-package pl.agh.dp.loadbalancer.data.acces.domain;
+package pl.agh.dp.loadbalancer.ClubPackage;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
