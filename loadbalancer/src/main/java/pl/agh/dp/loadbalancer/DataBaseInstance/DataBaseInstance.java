@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import org.hibernate.cfg.Configuration;
 
-public interface DatabaseInstance {
+public interface DataBaseInstance {
     boolean sendQuery(String query);
 
     DataBaseStates getState();
@@ -17,10 +17,11 @@ public interface DatabaseInstance {
 
     void loseConnection();
 
-    void getConnection();
+    void establishConnection();
 
     void setState(DataBaseState dataBaseState);
 
+    void createSession();
     void checkConnection();
 
     //  tutaj walniesz zamiast selecta swojego comanda

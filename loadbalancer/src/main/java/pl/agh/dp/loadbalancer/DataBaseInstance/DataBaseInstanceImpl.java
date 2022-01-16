@@ -1,27 +1,26 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.query.Query;
-import org.hibernate.service.spi.ServiceException;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBases;
 
-import javax.swing.text.StyledEditorKit;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class DBInstanceImpl implements DatabaseInstance {
+public class DataBaseInstanceImpl implements DataBaseInstance {
 
     private final DataBases dataBases;
+    private Session dataBaseSession;
+
     @Setter
-    private DataBaseState state = new DisconnectedState();
+    private DataBaseState state = new DisconnectedState(this);
+
     private final DataBaseConnectionConfig dataBaseConnectionConfig;
 
 
@@ -46,8 +45,13 @@ public class DBInstanceImpl implements DatabaseInstance {
     }
 
     @Override
+    public void createSession() {
+         this.dataBaseSession = getSessionFactory().openSession();
+    }
+
+    @Override
     public Session getSession() {
-        return getSessionFactory().openSession();
+        return this.dataBaseSession;
     }
 
     @Override
@@ -57,8 +61,8 @@ public class DBInstanceImpl implements DatabaseInstance {
     }
 
     @Override
-    public void getConnection() {
-        this.state.getConnection(this);
+    public void establishConnection() {
+        this.state.establishConnection(this);
 
     }
 
@@ -74,19 +78,22 @@ public class DBInstanceImpl implements DatabaseInstance {
 
     @Override
     public void processQuery(String select) {
-        Session session = getSession();
-        NativeQuery result = session.createSQLQuery(select);
+
+        NativeQuery result = this.dataBaseSession.createSQLQuery(select);
         List clubs = result.list();
         for(Object c : clubs)
         {
             Club club = new Club((Object[]) c);
             System.out.println(club.toString());
         }
-
-
     }
 
     public void checkConnection() {
-        Pinger.checkConnection(this);
+
+        if (this.state.isConnected()) {
+            establishConnection();
+        } else {
+            loseConnection();
+        }
     }
 }

@@ -1,17 +1,17 @@
 package pl.agh.dp.loadbalancer.LoadBalancer;
 
-import pl.agh.dp.loadbalancer.DataBaseInstance.DatabaseInstance;
+import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 
 import java.util.List;
 
 public class MinLoadStrategy implements BalanceStrategy{
 
-    public DatabaseInstance chooseDatabase(List<DatabaseInstance> databases) {
+    public DataBaseInstance chooseDatabase(List<DataBaseInstance> databases) {
 
-        DatabaseInstance minLoadDatabase = null;
+        DataBaseInstance minLoadDatabase = null;
         double minLoad = Double.POSITIVE_INFINITY;
 
-        for(DatabaseInstance database : databases){
+        for(DataBaseInstance database : databases){
             if(database.getLoad() < minLoad){
                 minLoad = database.getLoad();
                 minLoadDatabase = database;

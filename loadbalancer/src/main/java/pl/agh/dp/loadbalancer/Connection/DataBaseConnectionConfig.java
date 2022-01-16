@@ -1,17 +1,21 @@
 package pl.agh.dp.loadbalancer.Connection;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.cfg.Configuration;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 
-
-@RequiredArgsConstructor
+@Data
 public class DataBaseConnectionConfig {
     private final String driverClass;
     private final String connectionUrl;
     private final String userName;
     private final String password;
     private final String dialect;
+
+    public DataBaseConnectionConfig() {
+
+    }
 
     public Configuration getConfiguration()
     {

@@ -1,6 +1,6 @@
 package pl.agh.dp.loadbalancer.LoadBalancer;
 
-import pl.agh.dp.loadbalancer.DataBaseInstance.DatabaseInstance;
+import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseStates;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 
@@ -10,7 +10,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface{
 
     private DatabasesInterface dbInterface;
     // Here we only store database thaat are UP
-    private List<DatabaseInstance> databases;
+    private List<DataBaseInstance> databases;
     private BalanceStrategy balancer;
 
     LoadBalancerImpl(DatabasesInterface dbInterface){
@@ -28,8 +28,8 @@ public class LoadBalancerImpl implements LoadBalancerInterface{
     }
 
     private void updateDatabaseList(){
-        List<DatabaseInstance> currentDatabases = dbInterface.getDatabases();
-        for( DatabaseInstance database : currentDatabases){
+        List<DataBaseInstance> currentDatabases = dbInterface.getDatabases();
+        for( DataBaseInstance database : currentDatabases){
             if(databases.contains(database) && (database.getState() == DataBaseStates.DISCONNECTED || database.getState() == DataBaseStates.RESTORING))
                 databases.remove(database);
             else if(!databases.contains(database) && database.getState() == DataBaseStates.CONNECTED)
@@ -39,7 +39,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface{
 
     public void newQuery(String query) {
 
-        DatabaseInstance database;
+        DataBaseInstance database;
         do{
             updateDatabaseList();
             database = balancer.chooseDatabase(databases);
@@ -47,7 +47,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface{
 
     }
 
-    private boolean sendQuery(String query, DatabaseInstance database){
+    private boolean sendQuery(String query, DataBaseInstance database){
         return database.sendQuery(query);
     }
 

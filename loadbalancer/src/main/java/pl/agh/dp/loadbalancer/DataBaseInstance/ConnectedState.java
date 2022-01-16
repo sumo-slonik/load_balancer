@@ -1,6 +1,15 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
 public class ConnectedState implements DataBaseState{
+
+
+    DataBaseInstance dataBaseInstance;
+
+    @Override
+    public boolean isConnected() {
+        return this.dataBaseInstance.getSession().isConnected();
+    }
+
     @Override
     public void addCommandToQueue() {
 
@@ -12,12 +21,12 @@ public class ConnectedState implements DataBaseState{
     }
 
     @Override
-    public void loseConnection(DatabaseInstance databaseInstance) {
-        databaseInstance.setState(new DisconnectedState());
+    public void loseConnection(DataBaseInstance databaseInstance) {
+        databaseInstance.setState(new DisconnectedState(this.dataBaseInstance));
     }
 
     @Override
-    public void getConnection(DatabaseInstance databaseInstance) {
+    public void establishConnection(DataBaseInstance databaseInstance) {
 // nothing
     }
 

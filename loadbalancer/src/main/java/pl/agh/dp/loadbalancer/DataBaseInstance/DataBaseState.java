@@ -5,7 +5,8 @@ public interface DataBaseState {
     void addCommandToQueue();
     // method that processes commands on the queue
     void processCommandFromQueue();
-    void loseConnection(DatabaseInstance databaseInstance);
-    void getConnection(DatabaseInstance databaseInstance);
+    void loseConnection(DataBaseInstance databaseInstance);
+    void establishConnection(DataBaseInstance databaseInstance);
     DataBaseStates getState();
+    boolean isConnected();
 }

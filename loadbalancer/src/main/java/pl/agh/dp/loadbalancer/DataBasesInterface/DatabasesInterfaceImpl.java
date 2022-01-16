@@ -1,18 +1,18 @@
 package pl.agh.dp.loadbalancer.DataBasesInterface;
 
 
-import pl.agh.dp.loadbalancer.DataBaseInstance.DatabaseInstance;
+import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 
 import java.util.List;
 
 public class DatabasesInterfaceImpl implements DatabasesInterface{
 
 
-    List<DatabaseInstance> databases;
+    List<DataBaseInstance> databases;
 
 
     @Override
-    public List<DatabaseInstance> getDatabases() {
+    public List<DataBaseInstance> getDatabases() {
         return databases;
     }
 }
