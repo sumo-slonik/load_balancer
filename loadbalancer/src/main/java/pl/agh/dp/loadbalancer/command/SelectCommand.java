@@ -14,4 +14,9 @@ public class SelectCommand extends Command {
         databasesExecutor.databasesInterface.executeCUD(this);
     }
 
+    @Override
+    public String getCommand() {
+        return this.selectString;
+    }
+
 }

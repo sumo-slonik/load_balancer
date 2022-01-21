@@ -14,4 +14,9 @@ public class DeleteCommand extends Command{
         databasesExecutor.databasesInterface.executeCUD(this);
     }
 
+    @Override
+    public String getCommand() {
+        return this.deleteString;
+    }
+
 }

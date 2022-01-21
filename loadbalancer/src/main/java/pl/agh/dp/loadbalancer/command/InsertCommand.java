@@ -13,4 +13,9 @@ public class InsertCommand extends Command {
     public void execute() {
         databasesExecutor.databasesInterface.executeCUD(this);
     }
+
+    @Override
+    public String getCommand() {
+        return this.insertString;
+    }
 }
