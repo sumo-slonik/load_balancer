@@ -1,8 +1,10 @@
-package pl.agh.dp.loadbalancer.ClubPackage;
+package pl.agh.dp.loadbalancer.Connection;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.agh.dp.loadbalancer.ClubPackage.Club;
+import pl.agh.dp.loadbalancer.ClubPackage.ClubRepository;
 
 
 import java.util.List;

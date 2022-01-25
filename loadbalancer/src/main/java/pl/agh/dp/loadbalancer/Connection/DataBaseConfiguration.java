@@ -16,6 +16,12 @@ public class DataBaseConfiguration {
         return new DataBaseConnectionConfig();
     }
 
+    @Bean
+    @ConfigurationProperties("database.configuration.second")
+    DataBaseConnectionConfig secondConfig()
+    {
+        return new DataBaseConnectionConfig();
+    }
 
 
 
