@@ -28,6 +28,10 @@ public class Club {
         this.province = (String) object[4];
     }
 
+    public Club() {
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "club_id")

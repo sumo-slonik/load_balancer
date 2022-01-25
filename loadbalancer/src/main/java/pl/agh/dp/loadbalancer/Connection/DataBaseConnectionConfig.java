@@ -7,15 +7,11 @@ import pl.agh.dp.loadbalancer.ClubPackage.Club;
 
 @Data
 public class DataBaseConnectionConfig {
-    private final String driverClass;
-    private final String connectionUrl;
-    private final String userName;
-    private final String password;
-    private final String dialect;
-
-    public DataBaseConnectionConfig() {
-
-    }
+    private  String driverClass;
+    private  String connectionUrl;
+    private  String userName;
+    private  String password;
+    private  String dialect;
 
     public Configuration getConfiguration()
     {
