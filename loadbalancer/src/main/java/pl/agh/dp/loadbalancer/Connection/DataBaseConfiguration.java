@@ -1,9 +1,12 @@
 package pl.agh.dp.loadbalancer.Connection;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 @Configuration
 public class DataBaseConfiguration {
     @Bean
@@ -12,5 +15,8 @@ public class DataBaseConfiguration {
     {
         return new DataBaseConnectionConfig();
     }
+
+
+
 
 }

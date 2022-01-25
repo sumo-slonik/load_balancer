@@ -6,11 +6,19 @@ import pl.agh.dp.loadbalancer.command.Command;
 
 import java.util.List;
 
+@Component("DataBasesInterface")
 public class DatabasesInterfaceImpl implements DatabasesInterface{
 
+    @Autowired
+    private DataBaseConnectionConfig firstConfig;
 
     List<DataBaseInstance> databases;
 
+
+    public void printConf()
+    {
+        this.firstConfig.getConfiguration();
+    }
 
     @Override
     public List<DataBaseInstance> getDatabases() {
