@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "database.configuration.first.driverClass",
+      "type": "java.lang.String",
+      "description": "Description for database.configuration.first.driverClass."
+    },
+    {
+      "name": "database.configuration.first.connectionUrl",
+      "type": "java.lang.String",
+      "description": "Description for database.configuration.first.connectionUrl."
+    },
+    {
+      "name": "database.configuration.first.userName",
+      "type": "java.lang.String",
+      "description": "Description for database.configuration.first.userName."
+    },
+    {
+      "name": "database.configuration.first.password",
+      "type": "java.lang.String",
+      "description": "Description for database.configuration.first.password."
+    },
+    {
+      "name": "database.configuration.first.dialect",
+      "type": "java.lang.String",
+      "description": "Description for database.configuration.first.dialect."
+    }
+  ] }
