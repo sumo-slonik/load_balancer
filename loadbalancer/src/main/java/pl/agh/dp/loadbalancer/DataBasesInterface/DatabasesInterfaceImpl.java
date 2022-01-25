@@ -1,7 +1,7 @@
 package pl.agh.dp.loadbalancer.DataBasesInterface;
 
 
-import pl.agh.dp.loadbalancer.DataBaseInstance.DatabaseInstance;
+import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.command.Command;
 
 import java.util.List;
