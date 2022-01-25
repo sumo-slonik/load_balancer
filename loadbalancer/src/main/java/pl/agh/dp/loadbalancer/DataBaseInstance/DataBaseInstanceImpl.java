@@ -8,6 +8,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
+import pl.agh.dp.loadbalancer.DataBasesInterface.ConnectionChecker;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBases;
 
 import java.util.List;
@@ -96,4 +97,17 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
             loseConnection();
         }
     }
+
+
+    private ConnectionChecker connectionChecker;
+
+    public void startConnectionChecker(){
+
+        connectionChecker = new ConnectionChecker(this);
+
+        connectionChecker.startCheckingConnection();
+
+    }
+
+
 }
