@@ -40,7 +40,6 @@ public class Controler {
 
     @GetMapping(path="/test")
     public @ResponseBody String test() {
-        // This returns a JSON or XML with the users
         return "result";
     }
 

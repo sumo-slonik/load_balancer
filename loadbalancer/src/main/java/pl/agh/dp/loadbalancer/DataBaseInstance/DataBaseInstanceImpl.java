@@ -1,5 +1,6 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Session;
@@ -8,20 +9,22 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
-import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBases;
+import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 public class DataBaseInstanceImpl implements DataBaseInstance {
 
-    private final DataBases dataBases;
-    private Session dataBaseSession;
+    private final DataBaseNumber dataBaseNumber;
+    @Getter
+    private final DataBaseConnectionConfig dataBaseConnectionConfig;
+    private Session session;
+
 
     @Setter
     private DataBaseState state = new DisconnectedState(this);
 
-    private final DataBaseConnectionConfig dataBaseConnectionConfig;
 
 
     @Override
@@ -46,12 +49,12 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void createSession() {
-         this.dataBaseSession = getSessionFactory().openSession();
+        this.session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
     }
 
     @Override
     public Session getSession() {
-        return this.dataBaseSession;
+        return dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
     }
 
     @Override
@@ -79,13 +82,13 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Override
     public void processQuery(String select) {
 
-        NativeQuery result = this.dataBaseSession.createSQLQuery(select);
-        List clubs = result.list();
-        for(Object c : clubs)
-        {
-            Club club = new Club((Object[]) c);
-            System.out.println(club.toString());
-        }
+//        NativeQuery result = this.dataBaseSession.createSQLQuery(select);
+//        List clubs = result.list();
+//        for(Object c : clubs)
+//        {
+//            Club club = new Club((Object[]) c);
+//            System.out.println(club.toString());
+//        }
     }
 
     public void checkConnection() {

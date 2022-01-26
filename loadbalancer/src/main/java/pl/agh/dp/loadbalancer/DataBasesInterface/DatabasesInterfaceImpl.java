@@ -15,8 +15,7 @@ import java.util.List;
 public class DatabasesInterfaceImpl implements DatabasesInterface{
 
     @Autowired
-    List<DataBaseConnectionConfig> configList;
-
+    List<DataBaseInstance> dataBaseInstances;
     List<DataBaseInstance> databases;
 
 
@@ -49,6 +48,11 @@ public class DatabasesInterfaceImpl implements DatabasesInterface{
 //        }
 //        return result;
         return null;
+    }
+
+    public void test()
+    {
+        System.out.println("test");
     }
 
 }

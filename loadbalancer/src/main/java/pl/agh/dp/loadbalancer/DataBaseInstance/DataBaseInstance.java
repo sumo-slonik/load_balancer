@@ -24,6 +24,8 @@ public interface DataBaseInstance {
     void createSession();
     void checkConnection();
 
+    DataBaseConnectionConfig getDataBaseConnectionConfig();
+
     //  tutaj walniesz zamiast selecta swojego comanda
     void processQuery(String query);
 }
