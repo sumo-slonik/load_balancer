@@ -9,23 +9,25 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
+import pl.agh.dp.loadbalancer.DataBasesInterface.ConnectionChecker;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class DataBaseInstanceImpl implements DataBaseInstance {
 
+    @Getter
     private final DataBaseNumber dataBaseNumber;
     @Getter
     private final DataBaseConnectionConfig dataBaseConnectionConfig;
     private Session session;
 
-
     @Setter
     private DataBaseState state = new DisconnectedState(this);
-
-
 
     @Override
     public boolean sendQuery(String query) {
@@ -99,4 +101,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
             loseConnection();
         }
     }
+
 }
+
+

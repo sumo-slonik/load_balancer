@@ -39,8 +39,9 @@ public class DisconnectedState implements DataBaseState{
         try
         {
             dataBaseInstance.createSession();
-        }catch (HibernateException ex)
+        }catch (Exception ex)
         {
+            System.out.println(ex.getMessage());
             result = false;
         }
         return result;

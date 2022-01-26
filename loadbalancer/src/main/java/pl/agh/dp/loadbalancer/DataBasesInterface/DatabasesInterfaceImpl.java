@@ -8,6 +8,7 @@ import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.command.Command;
 
+import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +19,15 @@ public class DatabasesInterfaceImpl implements DatabasesInterface{
     List<DataBaseInstance> dataBaseInstances;
     List<DataBaseInstance> databases;
 
+
+    @PostConstruct
+    public void initPingers()
+    {
+        for (DataBaseInstance dataBaseInstance:dataBaseInstances)
+        {
+            new ConnectionChecker(dataBaseInstance);
+        }
+    }
 
     public void printConf()
     {

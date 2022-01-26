@@ -3,11 +3,14 @@ package pl.agh.dp.loadbalancer.DataBaseInstance;
 import org.hibernate.Session;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import org.hibernate.cfg.Configuration;
+import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 
 public interface DataBaseInstance {
     boolean sendQuery(String query);
 
     DataBaseStates getState();
+
+    DataBaseNumber getDataBaseNumber();
 
     Double getLoad();
 

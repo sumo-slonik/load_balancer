@@ -31,4 +31,11 @@ public class DataBaseConfiguration {
         return new DataBaseConnectionConfig();
     }
 
+    @Bean
+    @ConfigurationProperties("database.configuration.third")
+    DataBaseConnectionConfig thirdConfig()
+    {
+        return new DataBaseConnectionConfig();
+    }
+
 }

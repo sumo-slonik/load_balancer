@@ -24,5 +24,10 @@
       "name": "database.configuration.first.dialect",
       "type": "java.lang.String",
       "description": "Description for database.configuration.first.dialect."
+    },
+    {
+      "name": "database.configuration.third.driverClass",
+      "type": "java.lang.String",
+      "description": "Description for database.configuration.third.driverClass."
     }
   ] }
