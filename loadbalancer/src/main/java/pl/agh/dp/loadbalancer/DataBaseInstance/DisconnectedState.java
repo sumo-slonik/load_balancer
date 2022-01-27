@@ -25,7 +25,7 @@ public class DisconnectedState implements DataBaseState{
 
     @Override
     public void establishConnection(DataBaseInstance databaseInstance) {
-        databaseInstance.setState(new RestoringState());
+        databaseInstance.setState(new RestoringState(databaseInstance));
     }
 
     @Override

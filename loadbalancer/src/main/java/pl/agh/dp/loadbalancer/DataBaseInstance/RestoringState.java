@@ -1,8 +1,11 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class RestoringState implements DataBaseState{
 
-    DataBaseInstance dataBaseInstance;
+    private final DataBaseInstance dataBaseInstance;
 
 
     @Override
@@ -17,7 +20,7 @@ public class RestoringState implements DataBaseState{
 
     @Override
     public void loseConnection(DataBaseInstance databaseInstance) {
-        databaseInstance.setState(new DisconnectedState(this.dataBaseInstance));
+        databaseInstance.setState(new DisconnectedState(dataBaseInstance));
     }
 
     @Override
