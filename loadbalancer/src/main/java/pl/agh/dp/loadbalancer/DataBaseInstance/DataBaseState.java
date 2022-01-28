@@ -1,5 +1,8 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
+import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
+import pl.agh.dp.loadbalancer.command.Command;
+
 public interface DataBaseState {
     // method that adds commands to the queue
     void addCommandToQueue();
@@ -9,4 +12,9 @@ public interface DataBaseState {
     void establishConnection(DataBaseInstance databaseInstance);
     DataBaseStates getState();
     boolean isConnected();
+
+    void queryProcessorHandle();
+
+    void notifyQueryProcessor();
+
 }
