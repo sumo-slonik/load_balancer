@@ -1,12 +1,25 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
+import pl.agh.dp.loadbalancer.command.Command;
+import pl.agh.dp.loadbalancer.command.QueryType;
+
+import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
 public class RestoringState implements DataBaseState{
 
     private final DataBaseInstance dataBaseInstance;
 
+    @PostConstruct
+    @Override
+    public void notifyQueryProcessor(){
+        this.dataBaseInstance.notifyQueryProcessor();
+    }
 
     @Override
     public void addCommandToQueue() {
@@ -36,5 +49,26 @@ public class RestoringState implements DataBaseState{
     @Override
     public boolean isConnected() {
         return this.dataBaseInstance.getSession().isConnected();
+    }
+
+    @Override
+    public void queryProcessorHandle() {
+
+        Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
+
+        if(! command.getQueryType().equals(QueryType.SELECT)) {
+
+            Session databaseSession = this.dataBaseInstance.getSession();
+
+            Query resultQuery;
+
+            try {
+                resultQuery = databaseSession.createQuery(command.getCommand());
+            } catch (HibernateException exception) {
+                System.out.println(exception.toString());
+            }
+
+        }
+
     }
 }

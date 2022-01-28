@@ -12,4 +12,6 @@ public abstract class Command {
 
     public abstract String getCommand();
 
+    public abstract QueryType getQueryType();
+
 }

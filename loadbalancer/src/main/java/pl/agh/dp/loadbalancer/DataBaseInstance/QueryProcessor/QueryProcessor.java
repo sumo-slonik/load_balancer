@@ -33,6 +33,10 @@ public class QueryProcessor<T extends Command> implements Runnable {
         this.queryQueue = queryQueue;
     }
 
+    public T getCommand(){
+        return this.queryQueue.get();
+    }
+
 
     @Override
     public void run() {
@@ -41,36 +45,59 @@ public class QueryProcessor<T extends Command> implements Runnable {
                 return;
             }
 
-            T commandToProcess = this.queryQueue.get();
+            this.databaseInstance.getStateObject().queryProcessorHandle();
 
-            if(databaseInstance.getState().equals(DataBaseStates.CONNECTED)){
-                // wysylamy wszystko
+//            T commandToProcess = this.queryQueue.get();
+
+//            if(databaseInstance.getState().equals(DataBaseStates.CONNECTED)){
+//                // wysylamy wszystko
+//
+//
+//            } else if(databaseInstance.getState().equals(DataBaseStates.RESTORING)){
+//                // odbiermay wszystko, wysyłamy dmle
+//
+//
+//
+//            } else{
+//                // nie pobiera
+//
+//
+//            }
 
 
-            } else if(databaseInstance.getState().equals(DataBaseStates.RESTORING)){
-                // odbiermay wszystko, wysyłamy dmle
+
+//            switch (databaseInstance.getState()){
+//                case CONNECTED:
+//
+//                    break;
+//                case RESTORING:
+//
+//                    break;
+//                case DISCONNECTED:
+//
+//                    try {
+//                        this.wait();
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    break;
+//            }
 
 
-
-            } else{
-                // nie pobiera
-
-
-            }
-
-            String commandAsString = commandToProcess.getCommand();
-
-            // send to db
-
-            Session databaseSession =  databaseInstance.getSession();
-
-            Query resultQuery;
-
-            try{
-                resultQuery = databaseSession.createQuery(commandAsString);
-            } catch (HibernateException exception){
-                System.out.println(exception.toString());
-            }
+//            String commandAsString = commandToProcess.getCommand();
+//
+//            // send to db
+//
+//            Session databaseSession =  databaseInstance.getSession();
+//
+//            Query resultQuery;
+//
+//            try{
+//                resultQuery = databaseSession.createQuery(commandAsString);
+//            } catch (HibernateException exception){
+//                System.out.println(exception.toString());
+//            }
 
             
 
