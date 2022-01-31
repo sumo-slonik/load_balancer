@@ -13,7 +13,7 @@ import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.DataBasesInterface.ConnectionChecker;
 import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
-
+import org.hibernate.service.spi.ServiceException;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -30,15 +30,17 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Getter
     private QueryProcessor<Command> queryProcessor;
 
+    @Setter
+    private DataBaseState state = new DisconnectedState(this);
+
+    @Getter
     private Session session;
 
     @PostConstruct
     public void initQueryProcessor(){
         this.queryProcessor = new QueryProcessor<>(this);
+        createSession();
     }
-
-    @Setter
-    private DataBaseState state = new DisconnectedState(this);
 
     @Override
     public boolean sendQuery(String query) {
@@ -62,18 +64,12 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void createSession() {
-        this.session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
-    }
-
-    @Override
-    public Session getSession() {
-        return dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
+            this.session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
     }
 
     @Override
     public void loseConnection() {
         this.state.loseConnection(this);
-
     }
 
     @Override

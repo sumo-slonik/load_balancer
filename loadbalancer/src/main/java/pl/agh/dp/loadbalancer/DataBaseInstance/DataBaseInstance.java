@@ -27,6 +27,7 @@ public interface DataBaseInstance {
     void setState(DataBaseState dataBaseState);
 
     void createSession();
+
     void checkConnection();
 
     QueryProcessor<Command> getQueryProcesor();

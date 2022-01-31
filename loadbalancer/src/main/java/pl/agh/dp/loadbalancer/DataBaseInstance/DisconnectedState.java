@@ -2,6 +2,7 @@ package pl.agh.dp.loadbalancer.DataBaseInstance;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
+import org.hibernate.service.spi.ServiceException;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.command.Command;
 
@@ -48,7 +49,7 @@ public class DisconnectedState implements DataBaseState{
         try
         {
             dataBaseInstance.createSession();
-        }catch (Exception ex)
+        }catch (ServiceException | IllegalStateException ex)
         {
             System.out.println(ex.getMessage());
             result = false;

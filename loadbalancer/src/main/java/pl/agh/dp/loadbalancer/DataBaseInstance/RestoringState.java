@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.service.spi.ServiceException;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.command.QueryType;
@@ -48,7 +49,16 @@ public class RestoringState implements DataBaseState{
 
     @Override
     public boolean isConnected() {
-        return this.dataBaseInstance.getSession().isConnected();
+        boolean result = true;
+        try
+        {
+            dataBaseInstance.getConfiguration().buildSessionFactory().openSession();
+        }catch (ServiceException | IllegalStateException ex)
+        {
+            System.out.println(ex.getMessage());
+            result = false;
+        }
+        return result;
     }
 
     @Override

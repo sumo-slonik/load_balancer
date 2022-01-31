@@ -14,7 +14,7 @@ public class ConnectionChecker {
     private DataBaseInstance databaseInstance;
 
     @Getter
-    private static final long delay = 500L;
+    private static final long delay = 5000L;
 
     private final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2);
 
@@ -25,7 +25,6 @@ public class ConnectionChecker {
 
     public void startCheckingConnection(){
 
-//        executor.schedule(new CheckConnectionTask(), delay, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(new CheckConnectionTask(),0L, delay, TimeUnit.MILLISECONDS);
 
     }
@@ -37,8 +36,6 @@ public class ConnectionChecker {
         @Override
         public void run() {
             System.out.println(databaseInstance.getState()+" "+databaseInstance.getDataBaseNumber());
-//            executor.scheduleAtFixedRate(new CheckConnectionTask(),0L, delay, TimeUnit.MILLISECONDS);
-
             databaseInstance.checkConnection();
         }
     }
