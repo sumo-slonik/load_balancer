@@ -1,12 +1,12 @@
 package pl.agh.dp.loadbalancer.Connection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstanceImpl;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
+import pl.agh.dp.loadbalancer.RequestServer.RequestServer;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,5 +31,9 @@ public class DataBaseInstancesCreation {
         return result;
     }
 
+    @Bean
+    RequestServer socketServer(){
+        return new RequestServer();
+    }
 
 }

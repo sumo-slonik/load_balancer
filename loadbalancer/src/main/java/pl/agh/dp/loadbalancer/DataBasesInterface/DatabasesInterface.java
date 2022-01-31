@@ -12,9 +12,9 @@ public interface DatabasesInterface {
 
     List<DataBaseInstance> getDatabases();
 
-    public void executeCUD(Command command);
+    public String executeCUD(Command command);
 
-    public void executeSelect(Command command);
+    public String executeSelect(Command command);
 
     public List<Club> executeSelect(String command);
 

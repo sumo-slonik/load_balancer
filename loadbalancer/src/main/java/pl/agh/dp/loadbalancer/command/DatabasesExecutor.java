@@ -7,24 +7,24 @@ public class DatabasesExecutor {
 
     final DatabasesInterface databasesInterface = new DatabasesInterfaceImpl();
 
-    public void performInsert(String insertString){
+    public String performInsert(String insertString){
         Command insertCommand = new InsertCommand(this, insertString);
-        insertCommand.execute();
+        return insertCommand.execute();
     }
 
-    public void performSelect(String selectString){
+    public String performSelect(String selectString){
         Command selectCommand = new SelectCommand(this, selectString);
-        selectCommand.execute();
+        return selectCommand.execute();
     }
 
-    public void performUpdate(String updateString){
+    public String performUpdate(String updateString){
         Command updateCommand = new UpdateCommand(this, updateString);
-        updateCommand.execute();
+        return updateCommand.execute();
     }
 
-    public void performDelete(String deleteString){
+    public String performDelete(String deleteString){
         Command deleteCommand = new DeleteCommand(this, deleteString);
-        deleteCommand.execute();
+        return deleteCommand.execute();
     }
 
 

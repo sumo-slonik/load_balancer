@@ -1,12 +1,14 @@
-package pl.agh.dp.loadbalancer.socetServer;
+package pl.agh.dp.loadbalancer.RequestServer;
 
 import pl.agh.dp.loadbalancer.command.DatabasesExecutor;
 
+import javax.annotation.PostConstruct;
 import java.net.*;
 import java.io.*;
 
-public class SocetServer{
+public class RequestServer {
 
+    @PostConstruct
     public void startSocketServer() {
         int port = 9090;
 
@@ -38,23 +40,19 @@ public class SocetServer{
                         switch (splitedRequest[0]) {
                             case "SELECT":
                                 System.out.println("obsluga selecta");
-                                dbExecutor.performSelect(request);
-                                writer.println("Server przetworzyl selecta");
+                                writer.println(dbExecutor.performSelect(request));
                                 break;
                             case "DELETE":
                                 System.out.println("obsluga DELETE");
-                                dbExecutor.performDelete(request);
-                                writer.println("Server przetworzyl DELETE");
+                                writer.println(dbExecutor.performDelete(request));
                                 break;
                             case "INSERT":
                                 System.out.println("obsluga INSERTA");
-                                dbExecutor.performInsert(request);
-                                writer.println("Server przetworzyl Inserta");
+                                writer.println(dbExecutor.performInsert(request));
                                 break;
                             case "UPDATE":
                                 System.out.println("obsluga UPDATE");
-                                dbExecutor.performUpdate(request);
-                                writer.println("Server przetworzyl update");
+                                writer.println(dbExecutor.performUpdate(request));
                                 break;
                         }
 

@@ -8,7 +8,7 @@ public abstract class Command {
         this.databasesExecutor = databasesExecutor;
     }
 
-    public abstract void execute();
+    public abstract String execute();
 
     public abstract String getCommand();
 

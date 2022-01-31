@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
+import pl.agh.dp.loadbalancer.RequestServer.RequestServer;
 
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +23,8 @@ public class Controler {
     @Autowired
     private DatabasesInterface databasesInterface;
 
-
+    @Autowired
+    private RequestServer requestServer;
 
     @GetMapping(path="/getAll")
     public @ResponseBody Iterable<Club> getAllUsers() {

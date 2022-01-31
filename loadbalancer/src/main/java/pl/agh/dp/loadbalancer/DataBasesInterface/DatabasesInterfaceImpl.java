@@ -40,12 +40,13 @@ public class DatabasesInterfaceImpl implements DatabasesInterface{
     }
 
 
-    public void executeCUD(Command command){
+    public String executeCUD(Command command){
+        return "CUD executed";
     }
 
     @Override
-    public void executeSelect(Command command) {
-
+    public String executeSelect(Command command) {
+        return "Select executed";
     }
 
     public List<Club> executeSelect(String command){
