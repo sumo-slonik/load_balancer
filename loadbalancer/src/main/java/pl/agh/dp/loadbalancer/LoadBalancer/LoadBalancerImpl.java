@@ -13,7 +13,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface{
     private List<DataBaseInstance> databases;
     private BalanceStrategy balancer;
 
-    LoadBalancerImpl(DatabasesInterface dbInterface){
+    public LoadBalancerImpl(DatabasesInterface dbInterface){
         this.dbInterface = dbInterface;
         databases = dbInterface.getDatabases();
         updateDatabaseList();

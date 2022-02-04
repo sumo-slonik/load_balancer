@@ -6,7 +6,11 @@ import org.springframework.stereotype.Component;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
+import pl.agh.dp.loadbalancer.LoadBalancer.LoadBalancerImpl;
+import pl.agh.dp.loadbalancer.LoadBalancer.LoadBalancerInterface;
+import pl.agh.dp.loadbalancer.LoadBalancer.RoundRobinStrategy;
 import pl.agh.dp.loadbalancer.command.Command;
+import pl.agh.dp.loadbalancer.command.SelectCommand;
 
 import javax.annotation.PostConstruct;
 import java.util.LinkedList;
@@ -45,8 +49,12 @@ public class DatabasesInterfaceImpl implements DatabasesInterface{
     }
 
     @Override
-    public String executeSelect(Command command) {
-        return "Select executed";
+    public void executeSelect(SelectCommand command) {
+        LoadBalancerInterface loadBalancerInterface = new LoadBalancerImpl(this);
+
+        RoundRobinStrategy rrs = new RoundRobinStrategy();
+
+        rrs.chooseDatabase(this.dataBaseInstances).addCommandToQueue(command);
     }
 
     public List<Club> executeSelect(String command){
