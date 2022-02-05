@@ -5,6 +5,7 @@ import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.command.InsertCommand;
+import pl.agh.dp.loadbalancer.command.SelectCommand;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface DatabasesInterface {
 
     List<DataBaseInstance> getDatabases();
 
-    public String executeCUD(Command command);
+    public void executeCUD(Command command);
 
-    public String executeSelect(Command command);
+    public void executeSelect(SelectCommand command);
 
     public List<Club> executeSelect(String command);
 
