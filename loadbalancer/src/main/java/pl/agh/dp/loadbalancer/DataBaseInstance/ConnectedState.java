@@ -53,17 +53,27 @@ public class ConnectedState implements DataBaseState{
 
     @Override
     public void queryProcessorHandle() {
+        System.out.println("before get connected state");
         Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
+        System.out.println("after get " + command.getCommand());
 
         Session databaseSession =  this.dataBaseInstance.getSession();
 
-        Query resultQuery;
+        Query resultQuery = null;
 
         try{
             resultQuery = databaseSession.createQuery(command.getCommand());
         } catch (HibernateException exception){
             System.out.println(exception.toString());
         }
+
+        if(resultQuery == null){
+            command.setResult("null");
+        } else {
+            command.setResult(resultQuery.getQueryString());
+        }
+
+        command.notify();
 
     }
 

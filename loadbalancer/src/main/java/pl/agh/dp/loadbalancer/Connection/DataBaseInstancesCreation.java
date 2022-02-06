@@ -1,5 +1,6 @@
 package pl.agh.dp.loadbalancer.Connection;
 
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,9 @@ import java.util.List;
 public class DataBaseInstancesCreation {
 
     @Autowired
+    private BeanFactory beanFactory;
+
+    @Autowired
     List<DataBaseConnectionConfig> dataBaseConnectionConfigs;
 
     @Bean
@@ -24,7 +28,6 @@ public class DataBaseInstancesCreation {
         DataBaseNumber number = DataBaseNumber.FIRST;
         for (DataBaseConnectionConfig config:dataBaseConnectionConfigs)
         {
-
             result.add(new DataBaseInstanceImpl(number,config));
             number=number.next();
         }

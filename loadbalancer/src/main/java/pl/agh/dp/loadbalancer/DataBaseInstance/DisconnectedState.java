@@ -58,8 +58,9 @@ public class DisconnectedState implements DataBaseState{
     }
 
     @Override
-    public void queryProcessorHandle() {
+    public synchronized void queryProcessorHandle() {
         try {
+            System.out.println("zaczyna wait w disconnected state");
             this.dataBaseInstance.getQueryProcesor().wait();
         } catch (InterruptedException e) {
             e.printStackTrace();

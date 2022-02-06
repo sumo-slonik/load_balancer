@@ -62,7 +62,7 @@ public class DatabasesInterfaceImpl implements DatabasesInterface{
 //        List<Club> result = new LinkedList<>();
 //        for(Object c : clubs)
 //        {
-//            Club club = new Club((Object[]) c);
+//            Club club = new Club((Ocbject[]) c);
 //            result.add(club);
 //        }
 //        return result;

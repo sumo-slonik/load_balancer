@@ -26,6 +26,7 @@ public class DatabasesExecutor {
 
     public String performSelect(String selectString){
         SelectCommand selectCommand = new SelectCommand(this, selectString);
+        selectCommand.execute();
         return selectCommand.getResult();
     }
 

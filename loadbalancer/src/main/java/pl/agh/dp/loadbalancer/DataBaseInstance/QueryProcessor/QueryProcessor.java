@@ -40,11 +40,14 @@ public class QueryProcessor<T extends Command> implements Runnable {
 
     @Override
     public void run() {
-        while (true){
-            if(isEnd){
-                return;
+        while (true) {
+            synchronized (this) {
+                if (isEnd) {
+                    return;
+                }
+                System.out.println("query processor loop");
+                this.databaseInstance.getStateObject().queryProcessorHandle();
             }
-            this.databaseInstance.getStateObject().queryProcessorHandle();
         }
     }
 

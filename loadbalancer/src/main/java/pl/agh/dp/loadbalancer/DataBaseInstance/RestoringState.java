@@ -68,19 +68,25 @@ public class RestoringState implements DataBaseState {
 
             Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
 
-            if (!command.getQueryType().equals(QueryType.SELECT)) {
+            if(! command.getQueryType().equals(QueryType.SELECT)) {
 
                 Session databaseSession = this.dataBaseInstance.getSession();
 
-                Query resultQuery;
+                Query resultQuery = null;
 
-                try {
+                try{
                     resultQuery = databaseSession.createQuery(command.getCommand());
-                } catch (HibernateException exception) {
+                } catch (HibernateException exception){
                     System.out.println(exception.toString());
                 }
 
+
+            } else{
+                command.setResult("select failed");
+                command.notify();
             }
+
+
         }
 
     }
