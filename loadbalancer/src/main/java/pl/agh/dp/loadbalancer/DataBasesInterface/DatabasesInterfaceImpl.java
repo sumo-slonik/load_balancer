@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 
-@Component("DataBasesInterface")
+@Component
 public class DatabasesInterfaceImpl implements DatabasesInterface{
 
     @Autowired

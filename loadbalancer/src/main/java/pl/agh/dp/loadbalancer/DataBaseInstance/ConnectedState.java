@@ -1,5 +1,6 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -8,10 +9,11 @@ import pl.agh.dp.loadbalancer.command.Command;
 
 import javax.annotation.PostConstruct;
 
+@RequiredArgsConstructor
 public class ConnectedState implements DataBaseState{
 
 
-    DataBaseInstance dataBaseInstance;
+    private final DataBaseInstance dataBaseInstance;
 
     @PostConstruct
     @Override

@@ -5,7 +5,6 @@ import lombok.Getter;
 public class SelectCommand extends Command {
 
     final String selectString;
-
     @Getter
     final QueryType queryType = QueryType.SELECT;
 
@@ -16,14 +15,12 @@ public class SelectCommand extends Command {
 
     @Override
     public void execute() {
-        databasesExecutor.databasesInterface.executeSelect(this);
+         databasesExecutor.getDatabasesInterface().executeSelect(this);
     }
 
     @Override
     public String getCommand() {
         return this.selectString;
     }
-
-
 
 }

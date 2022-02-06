@@ -13,11 +13,12 @@ public interface DatabasesInterface {
 
     List<DataBaseInstance> getDatabases();
 
-    public void executeCUD(Command command);
+    String executeCUD(Command command);
 
-    public void executeSelect(SelectCommand command);
 
-    public List<Club> executeSelect(String command);
+    void executeSelect(SelectCommand command);
+
+    List<Club> executeSelect(String command);
 
 
 }

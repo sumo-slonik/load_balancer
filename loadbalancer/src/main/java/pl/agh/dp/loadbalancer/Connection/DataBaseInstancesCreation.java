@@ -31,9 +31,4 @@ public class DataBaseInstancesCreation {
         return result;
     }
 
-    @Bean
-    RequestServer socketServer(){
-        return new RequestServer();
-    }
-
 }

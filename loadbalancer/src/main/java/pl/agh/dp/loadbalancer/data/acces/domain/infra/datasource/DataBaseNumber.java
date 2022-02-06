@@ -9,7 +9,7 @@ public enum DataBaseNumber {
     SIXTH,
     SEVENTH,
     EIGHTH,
-    NINE,
+    NINTH,
     TENTH;
 
     public DataBaseNumber next()
@@ -30,8 +30,8 @@ public enum DataBaseNumber {
             case SEVENTH:
                 return EIGHTH;
             case EIGHTH:
-                return NINE;
-            case NINE:
+                return NINTH;
+            case NINTH:
                 return TENTH;
             case TENTH:
                 return null;

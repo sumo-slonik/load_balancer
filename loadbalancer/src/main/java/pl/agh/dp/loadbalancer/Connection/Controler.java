@@ -16,6 +16,7 @@ import java.util.List;
 @Controller // This means that this class is a Controller
 @RequestMapping(path="/clubs") // This means URL's start with /demo (after Application path)
 @ComponentScan("pl/agh/dp/loadbalancer/DataBasesInterface")
+@ComponentScan("pl/agh/dp/loadbalancer/RequestServer")
 public class Controler {
     @Autowired
     private ClubService clubService;

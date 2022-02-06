@@ -37,8 +37,11 @@ public interface DataBaseInstance {
     //  tutaj walniesz zamiast selecta swojego comanda
     void processQuery(String query);
 
-
     void notifyQueryProcessor();
 
     DataBaseState getStateObject();
+
+    Boolean hasEmptyQueue();
+
+    void addCommandToQueue(Command command);
 }

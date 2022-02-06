@@ -123,6 +123,16 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
         return this.state;
     }
 
+    @Override
+    public Boolean hasEmptyQueue()
+    {
+        return queryProcessor.hasEmptyQueue();
+    }
+
+    @Override
+    public void addCommandToQueue(Command command) {
+        queryProcessor.addCommandToQueue(command);
+    }
 }
 
 

@@ -29,8 +29,6 @@ public class ConnectionChecker {
 
     }
 
-
-
     private class CheckConnectionTask implements Runnable{
 
         @Override

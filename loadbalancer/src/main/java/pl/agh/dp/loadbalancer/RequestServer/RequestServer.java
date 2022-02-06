@@ -1,73 +1,108 @@
 package pl.agh.dp.loadbalancer.RequestServer;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import pl.agh.dp.loadbalancer.command.DatabasesExecutor;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.net.*;
 import java.io.*;
-
+@ComponentScan("pl/agh/dp/loadbalancer/command")
+@RequiredArgsConstructor
 public class RequestServer {
 
-    @PostConstruct
-    public void startSocketServer() {
-        int port = 9090;
+    private Thread socketServerThread;
+    private Boolean haveToStop = false;
 
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+    @Autowired
+    private DatabasesExecutor databasesExecutor;
+    private class SocketServerExecutor implements Runnable
+    {
 
-            System.out.println("Server is listening on port " + port);
+        DatabasesExecutor databasesExecutor;
+        SocketServerExecutor(DatabasesExecutor databasesExecutor)
+        {
+            this.databasesExecutor = databasesExecutor;
+        }
+        @Override
+        public void run()
+        {
+            int port = 9090;
 
-            DatabasesExecutor dbExecutor = new DatabasesExecutor();
+            try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-            while (true) {
-                Socket socket = serverSocket.accept();
-                System.out.println("New client connected");
+                System.out.println("Server is listening on port " + port);
 
-                InputStream input = socket.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                DatabasesExecutor dbExecutor = this.databasesExecutor;
 
-                OutputStream output = socket.getOutputStream();
-                PrintWriter writer = new PrintWriter(output, true);
+                while (!haveToStop) {
+                    Socket socket = serverSocket.accept();
+                    System.out.println("New client connected");
 
-                String request;
+                    InputStream input = socket.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
-                request = reader.readLine();
-                while(request != null && !request.equals("disconnect")) {
-                    System.out.println(request);
+                    OutputStream output = socket.getOutputStream();
+                    PrintWriter writer = new PrintWriter(output, true);
 
-                    // Tu obsluga zapytania
-                    String[] splitedRequest = request.split(" ");
-                    if(splitedRequest.length > 0){
-                        switch (splitedRequest[0]) {
-                            case "SELECT":
-                                System.out.println("obsluga selecta");
-                                writer.println(dbExecutor.performSelect(request));
-                                break;
-                            case "DELETE":
-                                System.out.println("obsluga DELETE");
-                                writer.println(dbExecutor.performDelete(request));
-                                break;
-                            case "INSERT":
-                                System.out.println("obsluga INSERTA");
-                                writer.println(dbExecutor.performInsert(request));
-                                break;
-                            case "UPDATE":
-                                System.out.println("obsluga UPDATE");
-                                writer.println(dbExecutor.performUpdate(request));
-                                break;
-                        }
-
-
-                    }
+                    String request;
 
                     request = reader.readLine();
-                }
-                socket.close();
-            }
+                    while(request != null && !request.equals("disconnect")) {
+                        System.out.println(request);
 
-        } catch (IOException ex) {
-            System.out.println("Server exception: " + ex.getMessage());
-            ex.printStackTrace();
+                        // Tu obsluga zapytania
+                        String[] splitedRequest = request.split(" ");
+                        if(splitedRequest.length > 0){
+                            switch (splitedRequest[0]) {
+                                case "SELECT":
+                                    System.out.println("obsluga selecta");
+                                    writer.println(dbExecutor.performSelect(request));
+                                    break;
+                                case "DELETE":
+                                    System.out.println("obsluga DELETE");
+                                    writer.println(dbExecutor.performDelete(request));
+                                    break;
+                                case "INSERT":
+                                    System.out.println("obsluga INSERTA");
+                                    writer.println(dbExecutor.performInsert(request));
+                                    break;
+                                case "UPDATE":
+                                    System.out.println("obsluga UPDATE");
+                                    writer.println(dbExecutor.performUpdate(request));
+                                    break;
+                            }
+
+
+                        }
+
+                        request = reader.readLine();
+                    }
+                    socket.close();
+                }
+
+            } catch (IOException ex) {
+                System.out.println("Server exception: " + ex.getMessage());
+                ex.printStackTrace();
+            }
         }
     }
+    @PostConstruct
+    public void startSocketServer() {
+        this.socketServerThread = new Thread(new SocketServerExecutor(databasesExecutor));
+        this.socketServerThread.start();
+    }
 
+    @PreDestroy
+    private void destructor()
+    {
+        haveToStop = true;
+        try {
+            socketServerThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
