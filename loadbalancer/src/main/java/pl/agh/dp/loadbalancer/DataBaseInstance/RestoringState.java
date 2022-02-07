@@ -62,30 +62,33 @@ public class RestoringState implements DataBaseState {
     @Override
     public void queryProcessorHandle() {
 
-        if (dataBaseInstance.hasEmptyQueue()) {
-            establishConnection(dataBaseInstance);
-        } else {
+        synchronized (this.dataBaseInstance.getQueryProcesor()) {
 
-            Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
+            if (dataBaseInstance.hasEmptyQueue()) {
+                establishConnection(dataBaseInstance);
+            } else {
 
-            if(! command.getQueryType().equals(QueryType.SELECT)) {
+                Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
 
-                Session databaseSession = this.dataBaseInstance.getSession();
+                if (!command.getQueryType().equals(QueryType.SELECT)) {
 
-                Query resultQuery = null;
+                    Session databaseSession = this.dataBaseInstance.getSession();
 
-                try{
-                    resultQuery = databaseSession.createQuery(command.getCommand());
-                } catch (HibernateException exception){
-                    System.out.println(exception.toString());
+                    Query resultQuery = null;
+
+                    try {
+                        resultQuery = databaseSession.createQuery(command.getCommand());
+                    } catch (HibernateException exception) {
+                        System.out.println(exception.toString());
+                    }
+
+
+                } else {
+                    command.setResult("select failed");
+                    command.notify();
                 }
 
-
-            } else{
-                command.setResult("select failed");
-                command.notify();
             }
-
 
         }
 

@@ -38,6 +38,7 @@ public class RequestServer {
                 DatabasesExecutor dbExecutor = this.databasesExecutor;
 
                 while (!haveToStop) {
+                    System.out.println("Żyję");
                     Socket socket = serverSocket.accept();
                     System.out.println("New client connected");
 
@@ -57,7 +58,7 @@ public class RequestServer {
                         String[] splitedRequest = request.split(" ");
                         if(splitedRequest.length > 0){
                             switch (splitedRequest[0]) {
-                                case "SELECT":
+                                case "From":
                                     System.out.println("obsluga selecta");
                                     writer.println(dbExecutor.performSelect(request));
                                     break;

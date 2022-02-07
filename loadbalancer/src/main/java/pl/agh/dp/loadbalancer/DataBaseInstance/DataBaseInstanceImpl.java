@@ -32,7 +32,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     private QueryProcessor<Command> queryProcessor;
     private Thread queryProcessorThread;
 
-    public synchronized QueryProcessor<Command> getQueryProcessor() {
+    public QueryProcessor<Command> getQueryProcessor() {
         return queryProcessor;
     }
 
