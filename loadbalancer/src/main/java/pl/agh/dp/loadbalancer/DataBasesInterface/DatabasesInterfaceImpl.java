@@ -53,11 +53,12 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
 
     @Override
     public void executeSelect(SelectCommand command) {
-        LoadBalancerInterface loadBalancerInterface = new LoadBalancerImpl(this);
 
-        RoundRobinStrategy rrs = new RoundRobinStrategy();
+        LoadBalancerInterface loadBalancer = new LoadBalancerImpl(this);
+        loadBalancer.chooseDatabase().addCommandToQueue(command);
 
-        rrs.chooseDatabase(getDatabases()).addCommandToQueue(command);
+        //RoundRobinStrategy rrs = new RoundRobinStrategy();
+        //rrs.chooseDatabase(getDatabases()).addCommandToQueue(command);
     }
 
     public List<Club> executeSelect(String command) {

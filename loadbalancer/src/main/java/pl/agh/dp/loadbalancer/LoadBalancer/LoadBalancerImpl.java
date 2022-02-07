@@ -9,7 +9,7 @@ import java.util.List;
 public class LoadBalancerImpl implements LoadBalancerInterface{
 
     private DatabasesInterface dbInterface;
-    // Here we only store database thaat are UP
+    // Here we only store databases that are UP
     private List<DataBaseInstance> databases;
     private BalanceStrategy balancer;
 
@@ -22,7 +22,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface{
 
     public void setBalanceStrategy(boolean useMinLoadBalance) {
         if(useMinLoadBalance)
-            balancer = new MinLoadStrategy();
+            balancer = new MinLoadStrategy(dbInterface);
         else
             balancer = new RoundRobinStrategy();
     }
@@ -35,6 +35,11 @@ public class LoadBalancerImpl implements LoadBalancerInterface{
             else if(!databases.contains(database) && database.getState() == DataBaseStates.CONNECTED)
                 databases.add(database);
         }
+    }
+
+    public DataBaseInstance chooseDatabase(){
+        updateDatabaseList();
+        return balancer.chooseDatabase(databases);
     }
 
     public void newQuery(String query) {
