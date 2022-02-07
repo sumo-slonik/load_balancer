@@ -40,67 +40,24 @@ public class QueryProcessor<T extends Command> implements Runnable {
 
     @Override
     public void run() {
-        while (true){
-            if(isEnd){
-                return;
+        while (true) {
+            synchronized (this) {
+                if (isEnd) {
+                    return;
+                }
+                System.out.println("query processor loop");
+                this.databaseInstance.getStateObject().queryProcessorHandle();
             }
-
-            this.databaseInstance.getStateObject().queryProcessorHandle();
-
-//            T commandToProcess = this.queryQueue.get();
-
-//            if(databaseInstance.getState().equals(DataBaseStates.CONNECTED)){
-//                // wysylamy wszystko
-//
-//
-//            } else if(databaseInstance.getState().equals(DataBaseStates.RESTORING)){
-//                // odbiermay wszystko, wysyłamy dmle
-//
-//
-//
-//            } else{
-//                // nie pobiera
-//
-//
-//            }
-
-
-
-//            switch (databaseInstance.getState()){
-//                case CONNECTED:
-//
-//                    break;
-//                case RESTORING:
-//
-//                    break;
-//                case DISCONNECTED:
-//
-//                    try {
-//                        this.wait();
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    break;
-//            }
-
-
-//            String commandAsString = commandToProcess.getCommand();
-//
-//            // send to db
-//
-//            Session databaseSession =  databaseInstance.getSession();
-//
-//            Query resultQuery;
-//
-//            try{
-//                resultQuery = databaseSession.createQuery(commandAsString);
-//            } catch (HibernateException exception){
-//                System.out.println(exception.toString());
-//            }
-
-            
-
         }
+    }
+
+    public Boolean hasEmptyQueue()
+    {
+        return queryQueue.isEmpty();
+    }
+
+    public void addCommandToQueue(T command)
+    {
+        queryQueue.add(command);
     }
 }

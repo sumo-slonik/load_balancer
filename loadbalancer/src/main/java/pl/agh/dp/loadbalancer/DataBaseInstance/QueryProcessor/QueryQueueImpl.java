@@ -42,5 +42,8 @@ public class QueryQueueImpl<T> implements QueryQueue<T> {
         this.queue.add(elementToAdd);
     }
 
-
+    @Override
+    public Boolean isEmpty() {
+        return queue.isEmpty();
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Date;
 @Entity(name = "CLUB")
 @Getter
 @Setter
-@Table(name = "clubs")
+@Table(name = "CLUBS_TABLE")
 public class Club {
 
 
@@ -53,6 +53,15 @@ public class Club {
     public String toString() {
         return "Club{" +
                 "clubName='" + clubName + '\'' +
+                ", city='" + city + '\'' +
                 '}';
+    }
+
+    public Club(Club club) {
+        this.club_id = club.club_id;
+        this.clubName =  club.clubName;
+        this.city =  club.city;
+        this.foundationDate =  club.foundationDate;
+        this.province =  club.province;
     }
 }

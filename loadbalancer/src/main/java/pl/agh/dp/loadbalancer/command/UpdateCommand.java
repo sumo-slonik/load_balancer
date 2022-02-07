@@ -15,7 +15,7 @@ public class UpdateCommand extends Command{
 
     @Override
     public void execute() {
-        databasesExecutor.databasesInterface.executeCUD(this);
+         databasesExecutor.getDatabasesInterface().executeCUD(this);
     }
 
     @Override

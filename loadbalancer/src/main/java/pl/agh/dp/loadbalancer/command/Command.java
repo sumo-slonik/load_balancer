@@ -20,7 +20,7 @@ public abstract class Command {
         this.result = result;
     }
 
-    public String getResult() {
+    public synchronized String getResult() {
         while(this.result == null){
             try{
                 wait();

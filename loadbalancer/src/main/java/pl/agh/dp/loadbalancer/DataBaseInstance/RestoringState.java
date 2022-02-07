@@ -12,13 +12,13 @@ import pl.agh.dp.loadbalancer.command.QueryType;
 import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
-public class RestoringState implements DataBaseState{
+public class RestoringState implements DataBaseState {
 
     private final DataBaseInstance dataBaseInstance;
 
     @PostConstruct
     @Override
-    public void notifyQueryProcessor(){
+    public void notifyQueryProcessor() {
         this.dataBaseInstance.notifyQueryProcessor();
     }
 
@@ -39,7 +39,7 @@ public class RestoringState implements DataBaseState{
 
     @Override
     public void establishConnection(DataBaseInstance databaseInstance) {
-//        nothing
+        databaseInstance.setState(new ConnectedState(dataBaseInstance));
     }
 
     @Override
@@ -50,11 +50,9 @@ public class RestoringState implements DataBaseState{
     @Override
     public boolean isConnected() {
         boolean result = true;
-        try
-        {
+        try {
             dataBaseInstance.getConfiguration().buildSessionFactory().openSession();
-        }catch (ServiceException | IllegalStateException ex)
-        {
+        } catch (ServiceException | IllegalStateException ex) {
             System.out.println(ex.getMessage());
             result = false;
         }
@@ -64,18 +62,32 @@ public class RestoringState implements DataBaseState{
     @Override
     public void queryProcessorHandle() {
 
-        Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
+        synchronized (this.dataBaseInstance.getQueryProcesor()) {
 
-        if(! command.getQueryType().equals(QueryType.SELECT)) {
+            if (dataBaseInstance.hasEmptyQueue()) {
+                establishConnection(dataBaseInstance);
+            } else {
 
-            Session databaseSession = this.dataBaseInstance.getSession();
+                Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
 
-            Query resultQuery;
+                if (!command.getQueryType().equals(QueryType.SELECT)) {
 
-            try {
-                resultQuery = databaseSession.createQuery(command.getCommand());
-            } catch (HibernateException exception) {
-                System.out.println(exception.toString());
+                    Session databaseSession = this.dataBaseInstance.getSession();
+
+                    Query resultQuery = null;
+
+                    try {
+                        resultQuery = databaseSession.createQuery(command.getCommand());
+                    } catch (HibernateException exception) {
+                        System.out.println(exception.toString());
+                    }
+
+
+                } else {
+                    command.setResult("select failed");
+                    command.notify();
+                }
+
             }
 
         }

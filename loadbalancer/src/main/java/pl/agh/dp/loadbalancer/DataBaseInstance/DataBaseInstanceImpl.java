@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
+import pl.agh.dp.loadbalancer.Connection.DataBaseConfiguration;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.DataBasesInterface.ConnectionChecker;
@@ -15,11 +16,11 @@ import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 import org.hibernate.service.spi.ServiceException;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-@RequiredArgsConstructor
 public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Getter
@@ -27,8 +28,13 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Getter
     private final DataBaseConnectionConfig dataBaseConnectionConfig;
 
-    @Getter
+
     private QueryProcessor<Command> queryProcessor;
+    private Thread queryProcessorThread;
+
+    public QueryProcessor<Command> getQueryProcessor() {
+        return queryProcessor;
+    }
 
     @Setter
     private DataBaseState state = new DisconnectedState(this);
@@ -36,10 +42,24 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Getter
     private Session session;
 
-    @PostConstruct
-    public void initQueryProcessor(){
+    public DataBaseInstanceImpl(DataBaseNumber dataBaseNumber, DataBaseConnectionConfig dataBaseConfiguration){
+        this.dataBaseNumber = dataBaseNumber;
+        this.dataBaseConnectionConfig = dataBaseConfiguration;
+
+        System.out.println("init query processor in databaseInstanceImpl");
         this.queryProcessor = new QueryProcessor<>(this);
-        createSession();
+        this.queryProcessorThread = new Thread(this.queryProcessor);
+        this.queryProcessorThread.start();
+    }
+
+    @PreDestroy
+    public void finishQueryProcessor(){
+        this.queryProcessor.setEnd(true);
+        try {
+            this.queryProcessorThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -123,6 +143,16 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
         return this.state;
     }
 
+    @Override
+    public Boolean hasEmptyQueue()
+    {
+        return queryProcessor.hasEmptyQueue();
+    }
+
+    @Override
+    public void addCommandToQueue(Command command) {
+        queryProcessor.addCommandToQueue(command);
+    }
 }
 
 

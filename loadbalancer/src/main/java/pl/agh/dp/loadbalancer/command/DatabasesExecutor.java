@@ -1,11 +1,23 @@
 package pl.agh.dp.loadbalancer.command;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterfaceImpl;
 
+@RequiredArgsConstructor
+@ComponentScan("pl/agh/dp/loadbalancer/DataBasesInterface")
 public class DatabasesExecutor {
 
-    final DatabasesInterface databasesInterface = new DatabasesInterfaceImpl();
+    @Autowired
+    @Getter
+    @Setter
+    private DatabasesInterface databasesInterface;
 
     public String performInsert(String insertString){
         Command insertCommand = new InsertCommand(this, insertString);
@@ -14,6 +26,7 @@ public class DatabasesExecutor {
 
     public String performSelect(String selectString){
         SelectCommand selectCommand = new SelectCommand(this, selectString);
+        selectCommand.execute();
         return selectCommand.getResult();
     }
 

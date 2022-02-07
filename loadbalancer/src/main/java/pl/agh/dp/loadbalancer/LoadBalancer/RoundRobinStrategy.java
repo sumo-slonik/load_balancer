@@ -11,7 +11,7 @@ public class RoundRobinStrategy implements BalanceStrategy{
     public DataBaseInstance chooseDatabase(List<DataBaseInstance> databases) {
         if(lastDatabaseIndex >= databases.size())
             lastDatabaseIndex = -1;
-
+        System.out.println(databases.get(1+lastDatabaseIndex).getState());
         return databases.get(++lastDatabaseIndex);
     }
 }

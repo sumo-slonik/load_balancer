@@ -6,5 +6,6 @@ public interface QueryQueue<T> {
 
     void add(T element);
 
+    Boolean isEmpty();
 
 }
