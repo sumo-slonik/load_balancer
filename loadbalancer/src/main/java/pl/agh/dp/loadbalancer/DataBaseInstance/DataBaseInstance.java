@@ -44,4 +44,6 @@ public interface DataBaseInstance {
     Boolean hasEmptyQueue();
 
     void addCommandToQueue(Command command);
+
+    String getDescription();
 }

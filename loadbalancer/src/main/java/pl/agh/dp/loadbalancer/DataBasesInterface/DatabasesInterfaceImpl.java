@@ -4,7 +4,6 @@ package pl.agh.dp.loadbalancer.DataBasesInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
-import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseStates;
 import pl.agh.dp.loadbalancer.LoadBalancer.LoadBalancerImpl;
@@ -14,7 +13,6 @@ import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.command.SelectCommand;
 
 import javax.annotation.PostConstruct;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,15 +20,18 @@ import java.util.stream.Collectors;
 public class DatabasesInterfaceImpl implements DatabasesInterface {
 
     @Autowired
-    List<DataBaseInstance> dataBaseInstances;
-    List<DataBaseInstance> databases;
+    List<DataBaseInstance> databaseInstances;
+
+    LoadBalancerInterface loadBalancer;
+
 
 
     @PostConstruct
     public void initPingers() {
-        for (DataBaseInstance dataBaseInstance : dataBaseInstances) {
+        for (DataBaseInstance dataBaseInstance : databaseInstances) {
             new ConnectionChecker(dataBaseInstance);
         }
+         loadBalancer= new LoadBalancerImpl(this);
     }
 
     public void printConf() {
@@ -39,20 +40,20 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
 
     @Override
     public List<DataBaseInstance> getDatabases() {
-        return dataBaseInstances.stream().
+        return databaseInstances.stream().
                 filter(dataBaseInstance -> dataBaseInstance.getState().equals(DataBaseStates.CONNECTED))
                 .collect(Collectors.toList());
     }
 
 
     public String executeCUD(Command command) {
+        databaseInstances.forEach(database -> database.addCommandToQueue(command));
         return "CUD executed";
     }
 
     @Override
     public void executeSelect(SelectCommand command) {
 
-        LoadBalancerInterface loadBalancer = new LoadBalancerImpl(this);
         loadBalancer.chooseDatabase().addCommandToQueue(command);
 
         //RoundRobinStrategy rrs = new RoundRobinStrategy();

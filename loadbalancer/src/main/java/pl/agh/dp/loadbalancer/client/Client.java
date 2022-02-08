@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Client {
 
-    static String[] requests = {"From CLUB","INSERT INTO tabela cos tam cos tam",
+    static String[] requests = {"From CLUB","update CLUB set city=:nowa where city=:Lublin",
             "UPDATE TABLE SET ... WHERE cos tam","DELETE FROM tabela WHERE cos tam"};
 
 

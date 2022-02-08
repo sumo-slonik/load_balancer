@@ -153,6 +153,12 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     public void addCommandToQueue(Command command) {
         queryProcessor.addCommandToQueue(command);
     }
+
+    @Override
+    public String getDescription()
+    {
+        return this.dataBaseConnectionConfig.getConnectionUrl()+" "+this.state+" "+this.dataBaseNumber;
+    }
 }
 
 
