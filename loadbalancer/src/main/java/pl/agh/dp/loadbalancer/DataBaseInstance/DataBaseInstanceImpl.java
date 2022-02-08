@@ -45,7 +45,6 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Setter
     private DataBaseState state = new DisconnectedState(this);
 
-
     @Getter
     private Session session;
 
@@ -159,6 +158,12 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Override
     public void addCommandToQueue(Command command) {
         queryProcessor.addCommandToQueue(command);
+    }
+
+    @Override
+    public String getDescription()
+    {
+        return this.dataBaseConnectionConfig.getConnectionUrl()+" "+this.state+" "+this.dataBaseNumber;
     }
 
     @Override

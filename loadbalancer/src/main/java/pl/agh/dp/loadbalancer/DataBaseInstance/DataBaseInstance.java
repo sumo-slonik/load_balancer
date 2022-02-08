@@ -47,6 +47,8 @@ public interface DataBaseInstance {
 
     void addCommandToQueue(Command command);
 
+    String getDescription();
+
     void throwbackSelectCommand(SelectCommand command);
 
     void setDatabasesInterface(DatabasesInterface databasesInterface);
