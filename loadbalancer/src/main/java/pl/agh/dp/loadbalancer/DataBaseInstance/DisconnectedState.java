@@ -9,7 +9,7 @@ import pl.agh.dp.loadbalancer.command.Command;
 import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
-public class DisconnectedState implements DataBaseState{
+public class DisconnectedState extends DataBaseState{
 
     private final DataBaseInstance dataBaseInstance;
 

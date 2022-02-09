@@ -12,7 +12,7 @@ import pl.agh.dp.loadbalancer.command.QueryType;
 import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
-public class RestoringState implements DataBaseState {
+public class RestoringState extends DataBaseState {
 
     private final DataBaseInstance dataBaseInstance;
 
