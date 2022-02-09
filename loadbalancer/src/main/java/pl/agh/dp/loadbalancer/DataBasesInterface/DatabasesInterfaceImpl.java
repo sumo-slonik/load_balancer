@@ -30,7 +30,9 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
     public void initPingers() {
         for (DataBaseInstance dataBaseInstance : dataBaseInstances) {
             new ConnectionChecker(dataBaseInstance);
+            dataBaseInstance.setDatabasesInterface(this);
         }
+
     }
 
     public void printConf() {

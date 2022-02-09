@@ -4,7 +4,9 @@ import org.hibernate.Session;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import org.hibernate.cfg.Configuration;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
+import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 import pl.agh.dp.loadbalancer.command.Command;
+import pl.agh.dp.loadbalancer.command.SelectCommand;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 
 public interface DataBaseInstance {
@@ -44,4 +46,10 @@ public interface DataBaseInstance {
     Boolean hasEmptyQueue();
 
     void addCommandToQueue(Command command);
+
+    void throwbackSelectCommand(SelectCommand command);
+
+    void setDatabasesInterface(DatabasesInterface databasesInterface);
+
+    DatabasesInterface getDatabasesInterface();
 }

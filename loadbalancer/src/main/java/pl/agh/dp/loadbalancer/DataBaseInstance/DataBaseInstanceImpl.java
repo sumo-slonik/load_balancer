@@ -12,7 +12,9 @@ import pl.agh.dp.loadbalancer.Connection.DataBaseConfiguration;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.DataBasesInterface.ConnectionChecker;
+import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 import pl.agh.dp.loadbalancer.command.Command;
+import pl.agh.dp.loadbalancer.command.SelectCommand;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 import org.hibernate.service.spi.ServiceException;
 import javax.annotation.PostConstruct;
@@ -28,6 +30,10 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Getter
     private final DataBaseConnectionConfig dataBaseConnectionConfig;
 
+    @Getter
+    @Setter
+    private DatabasesInterface databasesInterface;
+
 
     private QueryProcessor<Command> queryProcessor;
     private Thread queryProcessorThread;
@@ -38,6 +44,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Setter
     private DataBaseState state = new DisconnectedState(this);
+
 
     @Getter
     private Session session;
@@ -152,6 +159,12 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Override
     public void addCommandToQueue(Command command) {
         queryProcessor.addCommandToQueue(command);
+    }
+
+    @Override
+    public void throwbackSelectCommand(SelectCommand command){
+
+        this.databasesInterface.executeSelect(command);
     }
 }
 

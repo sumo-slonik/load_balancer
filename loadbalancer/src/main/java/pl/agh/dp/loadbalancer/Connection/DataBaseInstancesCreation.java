@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstanceImpl;
+import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 import pl.agh.dp.loadbalancer.RequestServer.RequestServer;
 
@@ -17,6 +18,8 @@ public class DataBaseInstancesCreation {
 
     @Autowired
     private BeanFactory beanFactory;
+
+    private DatabasesInterface databasesInterface;
 
     @Autowired
     List<DataBaseConnectionConfig> dataBaseConnectionConfigs;
