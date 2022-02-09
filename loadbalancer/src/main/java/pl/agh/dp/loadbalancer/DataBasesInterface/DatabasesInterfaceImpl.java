@@ -1,6 +1,8 @@
 package pl.agh.dp.loadbalancer.DataBasesInterface;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
@@ -22,8 +24,8 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
     @Autowired
     List<DataBaseInstance> databaseInstances;
 
-    LoadBalancerInterface loadBalancer;
-
+    @Autowired
+    private LoadBalancerInterface loadBalancer;
 
 
     @PostConstruct
@@ -31,7 +33,8 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
         for (DataBaseInstance dataBaseInstance : databaseInstances) {
             new ConnectionChecker(dataBaseInstance);
         }
-         loadBalancer= new LoadBalancerImpl(this);
+        this.loadBalancer.setDbInterface(this);
+//         loadBalancer= new LoadBalancerImpl(this);
     }
 
     public void printConf() {
