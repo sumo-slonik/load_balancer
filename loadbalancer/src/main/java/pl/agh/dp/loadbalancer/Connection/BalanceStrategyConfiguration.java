@@ -15,18 +15,18 @@ import pl.agh.dp.loadbalancer.LoadBalancer.RoundRobinStrategy;
 @Configuration
 public class BalanceStrategyConfiguration {
 //    load measure
-
-    @Bean
-    LoadMeasurer loadMeasurer()
-    {
-        return new LoadMeasurer();
-    }
-//    minLoadStrategy
-    @Bean
-    BalanceStrategy minLoad()
-    {
-        return new MinLoadStrategy();
-    }
+//
+//    @Bean
+//    LoadMeasurer loadMeasurer()
+//    {
+//        return new LoadMeasurer();
+//    }
+////    minLoadStrategy
+//    @Bean
+//    BalanceStrategy minLoad()
+//    {
+//        return new MinLoadStrategy();
+//    }
 
 //    roundRobin
 
