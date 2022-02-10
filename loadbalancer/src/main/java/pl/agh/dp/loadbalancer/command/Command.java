@@ -14,8 +14,6 @@ public abstract class Command {
 
     private String result;
 
-    public Map<String, String> parameters = new HashMap<>();
-
     @Getter
     public QueryType queryType;
 
@@ -33,13 +31,6 @@ public abstract class Command {
 
         if(this.queryType.equals(QueryType.SELECT)){
             return 0;
-        }
-
-        // sets parameters in transaction to values from map
-        // key is parameter name, value is parameter value
-        // insert doesn't use parameters
-        if(! this.queryType.equals(QueryType.INSERT)) {
-            this.parameters.forEach(updateQuery::setParameter);
         }
 
         Transaction transaction =  session.beginTransaction();
