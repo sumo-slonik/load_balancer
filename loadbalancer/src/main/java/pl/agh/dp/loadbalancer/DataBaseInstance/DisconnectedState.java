@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class DisconnectedState implements DataBaseState{
+public class DisconnectedState extends DataBaseState{
 
     private final DataBaseInstance dataBaseInstance;
 

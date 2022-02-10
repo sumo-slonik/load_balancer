@@ -4,6 +4,7 @@ package pl.agh.dp.loadbalancer.DataBasesInterface;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;

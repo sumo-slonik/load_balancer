@@ -9,6 +9,8 @@ import org.springframework.jdbc.object.SqlQuery;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.command.Command;
+import pl.agh.dp.loadbalancer.command.QueryType;
+import pl.agh.dp.loadbalancer.command.UpdateCommand;
 
 import javax.annotation.PostConstruct;
 import java.util.Iterator;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ConnectedState implements DataBaseState {
+public class ConnectedState extends DataBaseState {
 
 
     private final DataBaseInstance dataBaseInstance;
@@ -75,6 +77,9 @@ public class ConnectedState implements DataBaseState {
 
             try{
                 resultQuery = databaseSession.createQuery(command.getCommand());
+
+                int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
+
             } catch (HibernateException exception){
                 System.out.println(exception.toString());
             }

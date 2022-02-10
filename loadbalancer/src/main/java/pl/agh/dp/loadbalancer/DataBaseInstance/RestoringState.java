@@ -12,7 +12,7 @@ import pl.agh.dp.loadbalancer.command.QueryType;
 import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
-public class RestoringState implements DataBaseState {
+public class RestoringState extends DataBaseState {
 
     private final DataBaseInstance dataBaseInstance;
 
@@ -78,6 +78,8 @@ public class RestoringState implements DataBaseState {
 
                     try {
                         resultQuery = databaseSession.createQuery(command.getCommand());
+                        int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
+
                     } catch (HibernateException exception) {
                         System.out.println(exception.toString());
                     }
@@ -94,3 +96,5 @@ public class RestoringState implements DataBaseState {
 
     }
 }
+
+

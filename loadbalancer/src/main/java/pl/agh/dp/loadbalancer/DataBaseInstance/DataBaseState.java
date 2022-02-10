@@ -1,20 +1,26 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.Session;
+
 
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.command.Command;
+import pl.agh.dp.loadbalancer.command.UpdateCommand;
 
-public interface DataBaseState {
+public abstract class DataBaseState {
     // method that adds commands to the queue
-    void addCommandToQueue();
+    abstract void addCommandToQueue();
     // method that processes commands on the queue
-    void processCommandFromQueue();
-    void loseConnection(DataBaseInstance databaseInstance);
-    void establishConnection(DataBaseInstance databaseInstance);
-    DataBaseStates getState();
-    boolean isConnected();
+    abstract void processCommandFromQueue();
+    abstract void loseConnection(DataBaseInstance databaseInstance);
+    abstract void establishConnection(DataBaseInstance databaseInstance);
+    abstract DataBaseStates getState();
+    abstract boolean isConnected();
 
-    void queryProcessorHandle();
+    public abstract void queryProcessorHandle();
 
-    void notifyQueryProcessor();
+    abstract void notifyQueryProcessor();
+
 
 }
