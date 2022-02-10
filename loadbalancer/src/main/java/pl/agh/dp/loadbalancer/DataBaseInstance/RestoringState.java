@@ -78,6 +78,8 @@ public class RestoringState extends DataBaseState {
 
                     try {
                         resultQuery = databaseSession.createQuery(command.getCommand());
+                        int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
+
                     } catch (HibernateException exception) {
                         System.out.println(exception.toString());
                     }
@@ -94,3 +96,5 @@ public class RestoringState extends DataBaseState {
 
     }
 }
+
+

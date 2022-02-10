@@ -22,29 +22,5 @@ public abstract class DataBaseState {
 
     abstract void notifyQueryProcessor();
 
-    public int handleUpdateQuery(Query updateQuery, UpdateCommand updateCommand, Session session){
 
-        // sets parameters in transaction to values from map
-        // key is parameter name, value is parameter value
-        updateCommand.parameters.forEach(updateQuery::setParameter);
-
-        Transaction transaction =  session.beginTransaction();
-
-        int result = updateQuery.executeUpdate();
-
-        transaction.commit();
-
-        session.close();
-
-        return result;
-    }
-
-
-    public int handleDeleteQuery(Query resultQuery, UpdateCommand command, Session databaseSession){
-
-        return 0;
-
-
-
-    }
 }

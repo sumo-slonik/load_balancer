@@ -78,17 +78,7 @@ public class ConnectedState extends DataBaseState {
             try{
                 resultQuery = databaseSession.createQuery(command.getCommand());
 
-                int res;
-                switch (command.getQueryType()){
-                    case UPDATE:
-                        res = this.handleUpdateQuery(resultQuery, (UpdateCommand) command, databaseSession);
-                        break;
-                    case DELETE:
-                        res = this.handleDeleteQuery(resultQuery, (UpdateCommand) command, databaseSession);
-                        break;
-                }
-
-
+                int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
 
             } catch (HibernateException exception){
                 System.out.println(exception.toString());
