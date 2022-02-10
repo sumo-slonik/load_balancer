@@ -58,9 +58,10 @@ public class RequestServer {
                         String[] splitedRequest = request.split(" ");
                         if(splitedRequest.length > 0){
                             switch (splitedRequest[0]) {
-                                case "From":
+                                case "FROM":
                                     System.out.println("obsluga selecta");
-                                    writer.println(dbExecutor.performSelect(request));
+                                    String res = dbExecutor.performSelect(request);
+                                    writer.println(res);
                                     break;
                                 case "DELETE":
                                     System.out.println("obsluga DELETE");
@@ -78,6 +79,7 @@ public class RequestServer {
 
 
                         }
+                        writer.println("streamEndedSeq");
 
                         request = reader.readLine();
                     }
