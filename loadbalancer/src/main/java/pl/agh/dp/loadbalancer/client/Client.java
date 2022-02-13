@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 public class Client {
 
     static String[] requests = {"FROM CLUB","UPDATE CLUB SET",
-            "INSERT INTO CLUB xxddddddd","DELETE FROM CLUB WHERE"};
+            "INSERT INTO CLUB xxddddddd","DELETE FROM CLUB WHERE"
+            ,"MinLoad","RoundRobin"};
 
     static String[] columnNames = {"club_name", "city", "foundation_date (format YYYY-MM-DD)", "club_id", "province"};
 
@@ -21,6 +22,8 @@ public class Client {
         System.out.println("1 - "+requests[1]);
         System.out.println("2 - "+requests[2]);
         System.out.println("3 - "+requests[3]);
+        System.out.println("4 - "+requests[4]);
+        System.out.println("5 - "+requests[5]);
         System.out.println("lub wpisz 'disconnect' by zakonczyc");
 
         try (Socket socket = new Socket(hostname, port)) {

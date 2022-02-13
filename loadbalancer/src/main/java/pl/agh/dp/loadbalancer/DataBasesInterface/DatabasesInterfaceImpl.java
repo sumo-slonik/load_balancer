@@ -82,5 +82,13 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
         System.out.println("test");
     }
 
+    @Override
+    public void changeBalanceStrategyAsMinLoad() {
+        this.loadBalancer.setBalanceStrategy(true);
+    }
 
+    @Override
+    public void changeBalanceStrategyAsRoundRobin() {
+        this.loadBalancer.setBalanceStrategy(false);
+    }
 }

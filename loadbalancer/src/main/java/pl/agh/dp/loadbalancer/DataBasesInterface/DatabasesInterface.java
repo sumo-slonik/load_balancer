@@ -20,5 +20,8 @@ public interface DatabasesInterface {
 
     List<Club> executeSelect(String command);
 
+    void changeBalanceStrategyAsMinLoad();
+
+    void changeBalanceStrategyAsRoundRobin();
 
 }

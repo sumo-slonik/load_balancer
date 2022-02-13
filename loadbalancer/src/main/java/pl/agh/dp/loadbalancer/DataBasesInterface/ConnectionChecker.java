@@ -33,10 +33,12 @@ public class ConnectionChecker {
 
         @Override
         public void run() {
-            System.out.println(databaseInstance.getState()+" "+databaseInstance.getDataBaseNumber());
+            System.out.println(databaseInstance.getState()+" "+databaseInstance.getDataBaseNumber()+" "+databaseInstance.getLatency());
             databaseInstance.checkConnection();
+            databaseInstance.updateLatency();
         }
     }
+
 
 
 

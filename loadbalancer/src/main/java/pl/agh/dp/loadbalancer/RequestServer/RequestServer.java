@@ -3,12 +3,14 @@ package pl.agh.dp.loadbalancer.RequestServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 import pl.agh.dp.loadbalancer.command.DatabasesExecutor;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.net.*;
 import java.io.*;
+
 @ComponentScan("pl/agh/dp/loadbalancer/command")
 @RequiredArgsConstructor
 public class RequestServer {
@@ -18,17 +20,20 @@ public class RequestServer {
 
     @Autowired
     private DatabasesExecutor databasesExecutor;
-    private class SocketServerExecutor implements Runnable
-    {
+
+    @Autowired
+    private DatabasesInterface databasesInterface;
+
+    private class SocketServerExecutor implements Runnable {
 
         DatabasesExecutor databasesExecutor;
-        SocketServerExecutor(DatabasesExecutor databasesExecutor)
-        {
+
+        SocketServerExecutor(DatabasesExecutor databasesExecutor) {
             this.databasesExecutor = databasesExecutor;
         }
+
         @Override
-        public void run()
-        {
+        public void run() {
             int port = 9090;
 
             try (ServerSocket serverSocket = new ServerSocket(port)) {
@@ -51,12 +56,12 @@ public class RequestServer {
                     String request;
 
                     request = reader.readLine();
-                    while(request != null && !request.equals("disconnect")) {
+                    while (request != null && !request.equals("disconnect")) {
                         System.out.println(request);
 
                         // Tu obsluga zapytania
                         String[] splitedRequest = request.split(" ");
-                        if(splitedRequest.length > 0){
+                        if (splitedRequest.length > 0) {
                             switch (splitedRequest[0]) {
                                 case "FROM":
                                     System.out.println("obsluga selecta");
@@ -75,6 +80,17 @@ public class RequestServer {
                                     System.out.println("obsluga UPDATE");
                                     writer.println(dbExecutor.performUpdate(request));
                                     break;
+                                case "RoundRobin":
+                                    System.out.println("zmiana na RoundRobin");
+                                    writer.println("zmiana na RoundRobin");
+                                    databasesInterface.changeBalanceStrategyAsRoundRobin();
+                                    break;
+                                case "MinLoad":
+                                    System.out.println("changed to na MinLoad");
+                                    writer.println("changed to na MinLoad");
+                                    databasesInterface.changeBalanceStrategyAsMinLoad();
+
+                                    break;
                             }
 
 
@@ -92,6 +108,7 @@ public class RequestServer {
             }
         }
     }
+
     @PostConstruct
     public void startSocketServer() {
         this.socketServerThread = new Thread(new SocketServerExecutor(databasesExecutor));
@@ -99,8 +116,7 @@ public class RequestServer {
     }
 
     @PreDestroy
-    private void destructor()
-    {
+    private void destructor() {
         haveToStop = true;
         try {
             socketServerThread.join();

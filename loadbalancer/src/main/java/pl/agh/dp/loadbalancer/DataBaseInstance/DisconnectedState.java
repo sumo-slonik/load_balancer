@@ -84,7 +84,7 @@ public class DisconnectedState extends DataBaseState{
             dataBaseInstance.createSession();
         }catch (ServiceException | IllegalStateException ex)
         {
-            System.out.println(ex.getMessage());
+//            System.out.println(ex.getMessage());
             result = false;
         }
         return result;

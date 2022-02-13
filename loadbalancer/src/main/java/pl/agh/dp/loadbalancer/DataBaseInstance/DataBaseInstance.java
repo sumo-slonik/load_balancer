@@ -54,4 +54,11 @@ public interface DataBaseInstance {
     void setDatabasesInterface(DatabasesInterface databasesInterface);
 
     DatabasesInterface getDatabasesInterface();
+
+    void updateLatency();
+
+    long getLatency();
+
+    int compareTo(DataBaseInstance instance);
+
 }

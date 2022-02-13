@@ -6,7 +6,6 @@ import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseStates;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 
 import javax.annotation.PostConstruct;
-import java.util.LinkedList;
 import java.util.List;
 
 public class LoadBalancerImpl implements LoadBalancerInterface {
@@ -19,6 +18,9 @@ public class LoadBalancerImpl implements LoadBalancerInterface {
     @Autowired
     private BalanceStrategy roundRobin;
 
+    @Autowired
+    private BalanceStrategy minLoad;
+
     @PostConstruct
     public void init()
     {
@@ -28,7 +30,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface {
 
     public void setBalanceStrategy(boolean useMinLoadBalance) {
         if (useMinLoadBalance)
-            balancer = new MinLoadStrategy(dbInterface);
+            balancer = minLoad;
         else
             balancer = roundRobin;
     }
@@ -67,4 +69,6 @@ public class LoadBalancerImpl implements LoadBalancerInterface {
         databases = dbInterface.getDatabases();
         updateDatabaseList();
     }
+
+
 }

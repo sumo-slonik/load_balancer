@@ -19,6 +19,7 @@ import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 import org.hibernate.service.spi.ServiceException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +35,8 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Setter
     private DatabasesInterface databasesInterface;
 
+    @Getter
+    private long latency = 0;
 
     private QueryProcessor<Command> queryProcessor;
     private Thread queryProcessorThread;
@@ -170,6 +173,31 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     public void throwbackSelectCommand(SelectCommand command){
 
         this.databasesInterface.executeSelect(command);
+    }
+
+    @Override
+    public void updateLatency() {
+
+        if(state instanceof ConnectedState)
+        {
+
+            String querry = String.format("SELECT total_latency FROM sys.x$schema_table_statistics; where table_schema = '%s'",getSchemaName());
+            BigInteger a = (BigInteger) this.session.createSQLQuery(String.format("SELECT total_latency FROM sys.x$schema_table_statistics where table_schema = '%s'",getSchemaName())).list().stream().findFirst().orElse(new BigInteger("0"));
+            this.latency = a.longValue();
+        }
+
+    }
+
+    private String getSchemaName()
+    {
+        String [] res = this.dataBaseConnectionConfig.getConnectionUrl().split("/");
+        return res[res.length-1];
+    }
+
+    @Override
+    public int compareTo(DataBaseInstance instance)
+    {
+        return Long.compare(this.latency,instance.getLatency());
     }
 }
 
