@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 
 public class Client {
 
-    static String[] requests = {"FROM CLUB","UPDATE CLUB SET",
-            "INSERT INTO CLUB xxddddddd","DELETE FROM CLUB WHERE"
-            ,"MinLoad","RoundRobin"};
+    static String[] requests = {"FROM CLUB", "UPDATE CLUB SET",
+            "INSERT INTO CLUB xxddddddd", "DELETE FROM CLUB WHERE"
+            , "MinLoad", "RoundRobin","Description"};
 
     static String[] columnNames = {"club_name", "city", "foundation_date (format YYYY-MM-DD)", "club_id", "province"};
 
@@ -18,12 +18,13 @@ public class Client {
         int port = 9090;
 
         System.out.println("wybierz liczbe by wykonac nastepujaca operacje");
-        System.out.println("0 - "+requests[0]);
-        System.out.println("1 - "+requests[1]);
-        System.out.println("2 - "+requests[2]);
-        System.out.println("3 - "+requests[3]);
-        System.out.println("4 - "+requests[4]);
-        System.out.println("5 - "+requests[5]);
+        System.out.println("0 - " + requests[0]);
+        System.out.println("1 - " + requests[1]);
+        System.out.println("2 - " + requests[2]);
+        System.out.println("3 - " + requests[3]);
+        System.out.println("4 - " + requests[4]);
+        System.out.println("5 - " + requests[5]);
+        System.out.println("6- " +  requests[6]);
         System.out.println("lub wpisz 'disconnect' by zakonczyc");
 
         try (Socket socket = new Socket(hostname, port)) {
@@ -33,10 +34,10 @@ public class Client {
 
             String text;
 
-            Scanner sc= new Scanner(System.in);
+            Scanner sc = new Scanner(System.in);
             System.out.print("Enter a string: ");
             text = sc.nextLine();
-            while(!text.equals("disconnect")) {
+            while (!text.equals("disconnect")) {
 
                 switch (text) {
                     case "0":
@@ -93,7 +94,7 @@ public class Client {
                         if (updateSetColumnNameInputInt >= 0 && updateSetColumnNameInputInt < columnNames.length
                                 && updateWhereColumnNameInputInt >= 0 && updateWhereColumnNameInputInt < columnNames.length) {
 
-                            String updateRequest = requests[1] + " " + columnNames[updateSetColumnNameInputInt] + "=:" + updateSetInput+" WHERE "+
+                            String updateRequest = requests[1] + " " + columnNames[updateSetColumnNameInputInt] + "=:" + updateSetInput + " WHERE " +
                                     columnNames[updateWhereColumnNameInputInt] + "=:" + updateWhereInput;
 
                             System.out.println(updateRequest);
@@ -147,6 +148,48 @@ public class Client {
                                 System.out.println(deleteLine);
                                 deleteLine = deleteReader.readLine();
                             }
+                        }
+                        break;
+                    case "4":
+                        String deleteRequest = requests[4];
+                        System.out.println(deleteRequest);
+                        writer.println(deleteRequest);
+                        InputStream changeStrategy = socket.getInputStream();
+                        BufferedReader changeStrategyRender = new BufferedReader(new InputStreamReader(changeStrategy));
+
+                        String outputLine;
+                        outputLine = changeStrategyRender.readLine();
+                        while (!outputLine.equals("streamEndedSeq")) {
+                            System.out.println(outputLine);
+                            outputLine = changeStrategyRender.readLine();
+                        }
+
+                        break;
+                    case "5":
+                        String RQ = requests[5];
+                        System.out.println(RQ);
+                        writer.println(RQ);
+                        InputStream changeStrategy1 = socket.getInputStream();
+                        BufferedReader changeStrategyRender1 = new BufferedReader(new InputStreamReader(changeStrategy1));
+
+                        String outputLine1;
+                        outputLine1 = changeStrategyRender1.readLine();
+                        while (!outputLine1.equals("streamEndedSeq")) {
+                            System.out.println(outputLine1);
+                            outputLine1 = changeStrategyRender1.readLine();
+                        }
+                        break;
+                    case "6":
+                        String RQ1 = requests[6];
+                        System.out.println(RQ1);
+                        writer.println(RQ1);
+                        InputStream changeStrategy2 = socket.getInputStream();
+                        BufferedReader changeStrategyRender2 = new BufferedReader(new InputStreamReader(changeStrategy2));
+                        String outputLine2;
+                        outputLine2 = changeStrategyRender2.readLine();
+                        while (!outputLine2.equals("streamEndedSeq")) {
+                            System.out.println(outputLine2);
+                            outputLine2 = changeStrategyRender2.readLine();
                         }
                         break;
 

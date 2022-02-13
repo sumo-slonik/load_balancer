@@ -1,21 +1,13 @@
-package pl.agh.dp.loadbalancer.DataBaseInstance;
+package pl.agh.dp.loadbalancer.DataBaseInstance.States;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
-import org.springframework.jdbc.object.SqlQuery;
-import pl.agh.dp.loadbalancer.ClubPackage.Club;
-import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
+import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.command.Command;
-import pl.agh.dp.loadbalancer.command.QueryType;
-import pl.agh.dp.loadbalancer.command.UpdateCommand;
 
 import javax.annotation.PostConstruct;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor

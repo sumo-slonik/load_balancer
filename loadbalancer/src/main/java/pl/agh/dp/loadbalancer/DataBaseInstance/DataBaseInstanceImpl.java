@@ -1,28 +1,23 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.NativeQuery;
-import pl.agh.dp.loadbalancer.ClubPackage.Club;
-import pl.agh.dp.loadbalancer.Connection.DataBaseConfiguration;
 import pl.agh.dp.loadbalancer.Connection.DataBaseConnectionConfig;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
-import pl.agh.dp.loadbalancer.DataBasesInterface.ConnectionChecker;
+import pl.agh.dp.loadbalancer.DataBaseInstance.States.ConnectedState;
+import pl.agh.dp.loadbalancer.DataBaseInstance.States.DataBaseState;
+import pl.agh.dp.loadbalancer.DataBaseInstance.States.DataBaseStates;
+import pl.agh.dp.loadbalancer.DataBaseInstance.States.DisconnectedState;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.command.SelectCommand;
 import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
-import org.hibernate.service.spi.ServiceException;
-import javax.annotation.PostConstruct;
+
 import javax.annotation.PreDestroy;
 import java.math.BigInteger;
-import java.util.List;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class DataBaseInstanceImpl implements DataBaseInstance {
 
@@ -51,7 +46,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Getter
     private Session session;
 
-    public DataBaseInstanceImpl(DataBaseNumber dataBaseNumber, DataBaseConnectionConfig dataBaseConfiguration){
+    public DataBaseInstanceImpl(DataBaseNumber dataBaseNumber, DataBaseConnectionConfig dataBaseConfiguration) {
         this.dataBaseNumber = dataBaseNumber;
         this.dataBaseConnectionConfig = dataBaseConfiguration;
 
@@ -62,7 +57,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     }
 
     @PreDestroy
-    public void finishQueryProcessor(){
+    public void finishQueryProcessor() {
         this.queryProcessor.setEnd(true);
         try {
             this.queryProcessorThread.join();
@@ -93,7 +88,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void createSession() {
-            this.session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
+        this.session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
     }
 
     @Override
@@ -143,7 +138,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
         return this.queryProcessor;
     }
 
-    public void notifyQueryProcessor(){
+    public void notifyQueryProcessor() {
         this.queryProcessor.notify();
     }
 
@@ -153,8 +148,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     }
 
     @Override
-    public Boolean hasEmptyQueue()
-    {
+    public Boolean hasEmptyQueue() {
         return queryProcessor.hasEmptyQueue();
     }
 
@@ -164,13 +158,12 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     }
 
     @Override
-    public String getDescription()
-    {
-        return this.dataBaseConnectionConfig.getConnectionUrl()+" "+this.state+" "+this.dataBaseNumber;
+    public String getDescription() {
+        return "Data Base " + this.dataBaseNumber + ": url " + this.dataBaseConnectionConfig.getConnectionUrl() + " latency " + this.latency + " " + this.state;
     }
 
     @Override
-    public void throwbackSelectCommand(SelectCommand command){
+    public void throwbackSelectCommand(SelectCommand command) {
 
         this.databasesInterface.executeSelect(command);
     }
@@ -178,26 +171,23 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Override
     public void updateLatency() {
 
-        if(state instanceof ConnectedState)
-        {
+        if (state instanceof ConnectedState) {
 
-            String querry = String.format("SELECT total_latency FROM sys.x$schema_table_statistics; where table_schema = '%s'",getSchemaName());
-            BigInteger a = (BigInteger) this.session.createSQLQuery(String.format("SELECT total_latency FROM sys.x$schema_table_statistics where table_schema = '%s'",getSchemaName())).list().stream().findFirst().orElse(new BigInteger("0"));
+            String querry = String.format("SELECT total_latency FROM sys.x$schema_table_statistics; where table_schema = '%s'", getSchemaName());
+            BigInteger a = (BigInteger) this.session.createSQLQuery(String.format("SELECT total_latency FROM sys.x$schema_table_statistics where table_schema = '%s'", getSchemaName())).list().stream().findFirst().orElse(new BigInteger("0"));
             this.latency = a.longValue();
         }
 
     }
 
-    private String getSchemaName()
-    {
-        String [] res = this.dataBaseConnectionConfig.getConnectionUrl().split("/");
-        return res[res.length-1];
+    private String getSchemaName() {
+        String[] res = this.dataBaseConnectionConfig.getConnectionUrl().split("/");
+        return res[res.length - 1];
     }
 
     @Override
-    public int compareTo(DataBaseInstance instance)
-    {
-        return Long.compare(this.latency,instance.getLatency());
+    public int compareTo(DataBaseInstance instance) {
+        return Long.compare(this.latency, instance.getLatency());
     }
 }
 

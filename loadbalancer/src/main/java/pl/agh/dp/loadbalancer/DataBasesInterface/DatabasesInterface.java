@@ -24,4 +24,6 @@ public interface DatabasesInterface {
 
     void changeBalanceStrategyAsRoundRobin();
 
+    String getConnectedDataBaseDescription();
+
 }

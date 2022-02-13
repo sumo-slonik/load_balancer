@@ -11,6 +11,7 @@ public class MinLoadStrategy implements BalanceStrategy{
     public DataBaseInstance chooseDatabase(List<DataBaseInstance> databases) {
         double minLoad = Double.POSITIVE_INFINITY;
         databases.sort(Comparator.comparingLong(DataBaseInstance::getLatency));
+        System.out.println(databases.get(0).getDescription());
         return databases.get(0);
     }
 }

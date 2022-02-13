@@ -1,13 +1,8 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor;
 
 import lombok.Setter;
-import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
-import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseStates;
 import pl.agh.dp.loadbalancer.command.Command;
-
-import org.hibernate.Session;
 
 public class QueryProcessor<T extends Command> implements Runnable {
 

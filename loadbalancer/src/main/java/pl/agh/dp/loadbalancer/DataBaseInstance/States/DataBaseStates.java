@@ -1,4 +1,4 @@
-package pl.agh.dp.loadbalancer.DataBaseInstance;
+package pl.agh.dp.loadbalancer.DataBaseInstance.States;
 
 public enum DataBaseStates {
 

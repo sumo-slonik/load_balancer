@@ -1,17 +1,12 @@
 package pl.agh.dp.loadbalancer.DataBasesInterface;
 
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
-import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseStates;
-import pl.agh.dp.loadbalancer.LoadBalancer.LoadBalancerImpl;
+import pl.agh.dp.loadbalancer.DataBaseInstance.States.DataBaseStates;
 import pl.agh.dp.loadbalancer.LoadBalancer.LoadBalancerInterface;
-import pl.agh.dp.loadbalancer.LoadBalancer.RoundRobinStrategy;
 import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.command.SelectCommand;
 
@@ -90,5 +85,9 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
     @Override
     public void changeBalanceStrategyAsRoundRobin() {
         this.loadBalancer.setBalanceStrategy(false);
+    }
+
+    public String getConnectedDataBaseDescription() {
+        return getDatabases().stream().map(DataBaseInstance::getDescription).collect(Collectors.joining("\n"));
     }
 }

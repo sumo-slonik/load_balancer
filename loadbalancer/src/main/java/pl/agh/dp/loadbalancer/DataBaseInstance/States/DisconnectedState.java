@@ -1,7 +1,8 @@
-package pl.agh.dp.loadbalancer.DataBaseInstance;
+package pl.agh.dp.loadbalancer.DataBaseInstance.States;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
+import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryProcessor;
 import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.command.QueryType;

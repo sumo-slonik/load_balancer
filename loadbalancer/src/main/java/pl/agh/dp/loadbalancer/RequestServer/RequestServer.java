@@ -89,7 +89,9 @@ public class RequestServer {
                                     System.out.println("changed to na MinLoad");
                                     writer.println("changed to na MinLoad");
                                     databasesInterface.changeBalanceStrategyAsMinLoad();
-
+                                    break;
+                                case "Description":
+                                    writer.println(databasesInterface.getConnectedDataBaseDescription());
                                     break;
                             }
 

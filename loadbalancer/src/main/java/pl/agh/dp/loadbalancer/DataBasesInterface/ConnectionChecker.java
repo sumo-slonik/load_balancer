@@ -1,11 +1,8 @@
 package pl.agh.dp.loadbalancer.DataBasesInterface;
 
 import lombok.Getter;
-import lombok.Setter;
-import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseStates;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 
-import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 

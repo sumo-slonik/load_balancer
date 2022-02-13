@@ -2,7 +2,7 @@ package pl.agh.dp.loadbalancer.LoadBalancer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
-import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseStates;
+import pl.agh.dp.loadbalancer.DataBaseInstance.States.DataBaseStates;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 
 import javax.annotation.PostConstruct;
