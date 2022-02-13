@@ -13,9 +13,8 @@ public class UpdateCommand extends Command{
     final String updateString;
 
     public UpdateCommand(DatabasesExecutor databasesExecutor, String insertString){
-        super(databasesExecutor);
+        super(databasesExecutor, QueryType.UPDATE);
         this.updateString = insertString;
-        queryType = QueryType.UPDATE;
     }
 
     @Override
@@ -28,14 +27,9 @@ public class UpdateCommand extends Command{
         return this.updateString;
     }
 
-    @Override
-    public QueryType getQueryType() {
-        return queryType;
-    }
-
-    @Override
-    public int handleQueryParameters(Query updateQuery, Session session) {
-        return 0;
-    }
+//    @Override
+//    public int handleQueryParameters(Query updateQuery, Session session) {
+//        return 0;
+//    }
 
 }

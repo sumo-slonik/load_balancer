@@ -6,11 +6,9 @@ import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 public class SelectCommand extends Command {
 
     final String selectString;
-    @Getter
-    final QueryType queryType = QueryType.SELECT;
 
     public SelectCommand(DatabasesExecutor databasesExecutor, String insertString){
-        super(databasesExecutor);
+        super(databasesExecutor, QueryType.SELECT);
         this.selectString = insertString;
     }
 

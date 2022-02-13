@@ -5,12 +5,9 @@ import lombok.Getter;
 public class InsertCommand extends Command {
 
     final String insertString;
-    @Getter
-    final QueryType queryType = QueryType.INSERT;
-
 
     public InsertCommand(DatabasesExecutor databasesExecutor, String insertString){
-        super(databasesExecutor);
+        super(databasesExecutor,  QueryType.INSERT);
         this.insertString = insertString;
     }
 
@@ -23,4 +20,5 @@ public class InsertCommand extends Command {
     public String getCommand() {
         return this.insertString;
     }
+
 }

@@ -14,18 +14,20 @@ public abstract class Command {
 
     private String result;
 
-    @Getter
-    public QueryType queryType;
+    public final QueryType queryType;
 
-    public Command(DatabasesExecutor databasesExecutor){
+    public Command(DatabasesExecutor databasesExecutor, QueryType queryType){
         this.databasesExecutor = databasesExecutor;
+        this.queryType = queryType;
     }
 
     public abstract void execute();
 
     public abstract String getCommand();
 
-    public abstract QueryType getQueryType();
+    public QueryType getQueryType(){
+        return queryType;
+    };
 
     public int handleQueryParameters(Query updateQuery, Session session){
 

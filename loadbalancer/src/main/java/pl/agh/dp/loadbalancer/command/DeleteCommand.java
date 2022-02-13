@@ -5,12 +5,9 @@ import lombok.Getter;
 public class DeleteCommand extends Command{
 
     final String deleteString;
-    @Getter
-    final QueryType queryType = QueryType.DELETE;
-
 
     public DeleteCommand(DatabasesExecutor databasesExecutor, String insertString){
-        super(databasesExecutor);
+        super(databasesExecutor, QueryType.DELETE);
         this.deleteString = insertString;
     }
 
@@ -23,5 +20,6 @@ public class DeleteCommand extends Command{
     public String getCommand() {
         return this.deleteString;
     }
+
 
 }
