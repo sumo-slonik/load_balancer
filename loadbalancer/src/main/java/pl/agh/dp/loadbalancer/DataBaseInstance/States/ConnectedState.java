@@ -76,6 +76,8 @@ public class ConnectedState extends DataBaseState {
 
             Query resultQuery = null;
             int transactionResult;
+
+
 //            if(command.queryType.equals(QueryType.))
 
 
