@@ -21,6 +21,7 @@ public class DatabasesExecutor {
 
     public String performInsert(String insertString){
         Command insertCommand = new InsertCommand(this, insertString);
+        insertCommand.execute();
         return "inserted";
     }
 

@@ -2,16 +2,17 @@ package pl.agh.dp.loadbalancer.client;
 
 import java.net.*;
 import java.io.*;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Client {
 
     static String[] requests = {"FROM CLUB", "UPDATE CLUB SET",
-            "INSERT INTO CLUB xxddddddd", "DELETE FROM CLUB WHERE"
+            "INSERT INTO CLUB (clubName,city,foundation_date,club_id,province) VALUES club_name,city, foundation_date, club_id,province FROM INSERT_CLUB where club_name = 'nowyklub' ", "DELETE FROM CLUB WHERE"
             , "MinLoad", "RoundRobin","Description"};
 
-    static String[] columnNames = {"club_name", "city", "foundation_date (format YYYY-MM-DD)", "club_id", "province"};
+    static String[] columnNames = {"clubName", "city", "foundationDate", "club_id", "province"};
 
     public static void main(String[] args) {
         String hostname = "localhost";
@@ -47,17 +48,8 @@ public class Client {
                         InputStream selectAllInput = socket.getInputStream();
                         BufferedReader selectAllReader = new BufferedReader(new InputStreamReader(selectAllInput));
 
+                        getOutput(selectAllReader);
 
-//                        String selectAllServerAnswer = selectAllReader.readLine();
-//                        String selectAllServerAnswer =  selectAllReader.lines().collect(Collectors.joining());
-//                        System.out.println(selectAllServerAnswer);
-
-                        String selectLine;
-                        selectLine = selectAllReader.readLine();
-                        while (!selectLine.equals("streamEndedSeq")) {
-                            System.out.println(selectLine);
-                            selectLine = selectAllReader.readLine();
-                        }
                         break;
                     case "1":
                         for (int i = 0; i < columnNames.length; i++) {
@@ -94,8 +86,8 @@ public class Client {
                         if (updateSetColumnNameInputInt >= 0 && updateSetColumnNameInputInt < columnNames.length
                                 && updateWhereColumnNameInputInt >= 0 && updateWhereColumnNameInputInt < columnNames.length) {
 
-                            String updateRequest = requests[1] + " " + columnNames[updateSetColumnNameInputInt] + "=:" + updateSetInput + " WHERE " +
-                                    columnNames[updateWhereColumnNameInputInt] + "=:" + updateWhereInput;
+                            String updateRequest = requests[1] + " " + columnNames[updateSetColumnNameInputInt] + "=" + updateSetInput + " WHERE " +
+                                    columnNames[updateWhereColumnNameInputInt] + "=" + updateWhereInput;
 
                             System.out.println(updateRequest);
 
@@ -103,17 +95,41 @@ public class Client {
                             InputStream updateInput = socket.getInputStream();
                             BufferedReader updateReader = new BufferedReader(new InputStreamReader(updateInput));
 
-
-                            String updateLine;
-                            updateLine = updateReader.readLine();
-                            while (!updateLine.equals("streamEndedSeq")) {
-                                System.out.println(updateLine);
-                                updateLine = updateReader.readLine();
-                            }
+                            getOutput(updateReader);
                         }
 
                         break;
                     case "2":
+
+                        System.out.println(new Date());
+//                        Scanner insertClubName = new Scanner(System.in);
+//                        System.out.print("Club name: ");
+//                        String clubName = insertClubName.nextLine();
+//
+//                        Scanner insertCity = new Scanner(System.in);
+//                        System.out.print("City: ");
+//                        String city = insertCity.nextLine();
+//
+//                        Scanner insertFoundationDate = new Scanner(System.in);
+//                        System.out.print("Foundation date (format YYYY-MM-DD): ");
+//                        String foundationDate = insertFoundationDate.nextLine();
+//
+//                        Scanner insertClubId = new Scanner(System.in);
+//                        System.out.print("club id: ");
+//                        String clubId = insertClubId.nextLine();
+//
+//                        Scanner insertProvince = new Scanner(System.in);
+//                        System.out.print("Province: ");
+//                        String province = insertProvince.nextLine();
+//
+//                        String insertString = requests[2] + clubName + "','" + city +"',STR_TO_DATE('" + foundationDate+"', '%Y-%M-%d'),'" + clubId +"','" + province +"')";
+//                        System.out.println(insertString);
+
+                        writer.println(requests[2]);
+                        InputStream insertInput = socket.getInputStream();
+                        BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertInput));
+
+                        getOutput(insertReader);
 
                         break;
                     case "3":
@@ -141,13 +157,7 @@ public class Client {
                             InputStream deleteInput = socket.getInputStream();
                             BufferedReader deleteReader = new BufferedReader(new InputStreamReader(deleteInput));
 
-
-                            String deleteLine;
-                            deleteLine = deleteReader.readLine();
-                            while (!deleteLine.equals("streamEndedSeq")) {
-                                System.out.println(deleteLine);
-                                deleteLine = deleteReader.readLine();
-                            }
+                            getOutput(deleteReader);
                         }
                         break;
                     case "4":
@@ -157,12 +167,7 @@ public class Client {
                         InputStream changeStrategy = socket.getInputStream();
                         BufferedReader changeStrategyRender = new BufferedReader(new InputStreamReader(changeStrategy));
 
-                        String outputLine;
-                        outputLine = changeStrategyRender.readLine();
-                        while (!outputLine.equals("streamEndedSeq")) {
-                            System.out.println(outputLine);
-                            outputLine = changeStrategyRender.readLine();
-                        }
+                        getOutput(changeStrategyRender);
 
                         break;
                     case "5":
@@ -172,12 +177,13 @@ public class Client {
                         InputStream changeStrategy1 = socket.getInputStream();
                         BufferedReader changeStrategyRender1 = new BufferedReader(new InputStreamReader(changeStrategy1));
 
-                        String outputLine1;
-                        outputLine1 = changeStrategyRender1.readLine();
-                        while (!outputLine1.equals("streamEndedSeq")) {
-                            System.out.println(outputLine1);
-                            outputLine1 = changeStrategyRender1.readLine();
-                        }
+                        getOutput(changeStrategyRender1);
+//                        String outputLine1;
+//                        outputLine1 = changeStrategyRender1.readLine();
+//                        while (!outputLine1.equals("streamEndedSeq")) {
+//                            System.out.println(outputLine1);
+//                            outputLine1 = changeStrategyRender1.readLine();
+//                        }
                         break;
                     case "6":
                         String RQ1 = requests[6];
@@ -185,12 +191,8 @@ public class Client {
                         writer.println(RQ1);
                         InputStream changeStrategy2 = socket.getInputStream();
                         BufferedReader changeStrategyRender2 = new BufferedReader(new InputStreamReader(changeStrategy2));
-                        String outputLine2;
-                        outputLine2 = changeStrategyRender2.readLine();
-                        while (!outputLine2.equals("streamEndedSeq")) {
-                            System.out.println(outputLine2);
-                            outputLine2 = changeStrategyRender2.readLine();
-                        }
+
+                        getOutput(changeStrategyRender2);
                         break;
 
                 }
@@ -221,6 +223,17 @@ public class Client {
 
             System.out.println("I/O error: " + ex.getMessage());
         }
+    }
+
+    private static void getOutput(BufferedReader reader) throws IOException {
+
+        String selectLine;
+        selectLine = reader.readLine();
+        while (!selectLine.equals("streamEndedSeq")) {
+            System.out.println(selectLine);
+            selectLine = reader.readLine();
+        }
+
     }
 
 }
