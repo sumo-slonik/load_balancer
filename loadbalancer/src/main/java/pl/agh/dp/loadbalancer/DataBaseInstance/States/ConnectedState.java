@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.command.Command;
+import pl.agh.dp.loadbalancer.command.QueryType;
 
 import javax.annotation.PostConstruct;
 import java.util.stream.Collectors;
@@ -81,15 +82,21 @@ public class ConnectedState extends DataBaseState {
             }
 
 
-            if (resultQuery == null) {
-                command.setResult("null");
-            } else {
+//            if (resultQuery == null) {
+//                command.setResult("null");
+//            } else {
+//                String res = (String) resultQuery.list().stream().map(club -> club.toString()).collect(Collectors.joining("\n"));
+//
+//                command.setResult(res);
+//            }
+
+            if(command.queryType.equals(QueryType.SELECT)){
                 String res = (String) resultQuery.list().stream().map(club -> club.toString()).collect(Collectors.joining("\n"));
 
-
-
-
                 command.setResult(res);
+            }
+            else{
+                command.setResult("");
             }
 
             command.notify();
