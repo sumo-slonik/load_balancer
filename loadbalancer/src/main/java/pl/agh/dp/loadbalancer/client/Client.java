@@ -154,7 +154,7 @@ public class Client {
 
                         System.out.println("where:");
                         Scanner deleteWhereScanner = new Scanner(System.in);
-                        System.out.print("where " + columnNames[deleteColumnNameInputInt] + "==");
+                        System.out.print("where " + columnNames[deleteColumnNameInputInt] + "=");
                         String deleteWhereInput = deleteWhereScanner.nextLine();
 
                         if (deleteColumnNameInputInt >= 0 && deleteColumnNameInputInt < columnNames.length) {
