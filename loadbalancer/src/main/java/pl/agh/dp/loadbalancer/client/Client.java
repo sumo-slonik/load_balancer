@@ -16,8 +16,6 @@ public class Client {
 
     public static void main(String[] args) {
 
-
-
         String hostname = "localhost";
         int port = 9090;
 
@@ -75,7 +73,7 @@ public class Client {
                         int updateSetColumnNameInputInt = Integer.parseInt(updateColumnNameInput);
 
                         Scanner updateSetScanner = new Scanner(System.in);
-                        System.out.print("SET " + columnNames[updateSetColumnNameInputInt] + "=:");
+                        System.out.print("SET " + columnNames[updateSetColumnNameInputInt] + "=");
                         String updateSetInput = updateSetScanner.nextLine();
 
                         for (int i = 0; i < columnNames.length; i++) {
@@ -91,7 +89,7 @@ public class Client {
 
                         System.out.println("where:");
                         Scanner updateWhereScanner = new Scanner(System.in);
-                        System.out.print("where " + columnNames[updateWhereColumnNameInputInt] + "=:");
+                        System.out.print("where " + columnNames[updateWhereColumnNameInputInt] + "=");
                         String updateWhereInput = updateWhereScanner.nextLine();
 
                         if (updateSetColumnNameInputInt >= 0 && updateSetColumnNameInputInt < columnNames.length
@@ -161,7 +159,7 @@ public class Client {
 
                         if (deleteColumnNameInputInt >= 0 && deleteColumnNameInputInt < columnNames.length) {
 
-                            String deleteRequest = requests[3] + " " + columnNames[deleteColumnNameInputInt] + "=:" + deleteWhereInput;
+                            String deleteRequest = requests[3] + " " + columnNames[deleteColumnNameInputInt] + "=" + deleteWhereInput;
                             System.out.println(deleteRequest);
 
                             writer.println(deleteRequest);
