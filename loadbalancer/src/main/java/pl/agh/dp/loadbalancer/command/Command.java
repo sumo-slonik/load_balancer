@@ -35,13 +35,12 @@ public abstract class Command {
             return 0;
         }
 
-        Transaction transaction =  session.beginTransaction();
+        session.beginTransaction();
 
         int result = updateQuery.executeUpdate();
 
-        transaction.commit();
+        session.getTransaction().commit();
 
-//        session.close();
 
         return result;
     }
