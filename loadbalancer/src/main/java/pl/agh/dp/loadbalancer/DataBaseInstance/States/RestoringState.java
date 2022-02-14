@@ -5,11 +5,15 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.service.spi.ServiceException;
+import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
 import pl.agh.dp.loadbalancer.command.Command;
 import pl.agh.dp.loadbalancer.command.QueryType;
 
 import javax.annotation.PostConstruct;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RestoringState extends DataBaseState {
 
@@ -83,8 +87,31 @@ public class RestoringState extends DataBaseState {
                     Query resultQuery = null;
 
                     try {
-                        resultQuery = databaseSession.createQuery(command.getCommand());
-                        int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
+                        if(command.queryType.equals(QueryType.INSERT)){
+                            databaseSession.beginTransaction();
+                            //Add new Employee object
+                            Club club = new Club();
+                            club.setClubName("nowy klub testowy");
+                            club.setCity("Kraków");
+                            club.setProvince("Podkarpacie");
+                            Date date1 = null;
+                            try {
+                                date1=new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            club.setFoundationDate(date1);
+                            //Save the employee in database
+                            databaseSession.save(club);
+                            //Commit the transaction
+                            databaseSession.getTransaction().commit();
+                        }
+                        else
+                        {
+                            resultQuery = databaseSession.createQuery(command.getCommand());
+                            int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
+                        }
+
 
                     } catch (HibernateException exception) {
                         System.out.println(exception.toString());
