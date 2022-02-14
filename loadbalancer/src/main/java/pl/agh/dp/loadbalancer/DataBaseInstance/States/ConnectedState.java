@@ -71,11 +71,16 @@ public class ConnectedState extends DataBaseState {
             Session databaseSession = this.dataBaseInstance.getSession();
 
             Query resultQuery = null;
+            int transactionResult;
+
+
+//            if(command.queryType.equals(QueryType.))
 
             try{
                 resultQuery = databaseSession.createQuery(command.getCommand());
 
-                int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
+
+                transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
 
             } catch (HibernateException exception){
                 System.out.println(exception.toString());

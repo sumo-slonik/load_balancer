@@ -41,7 +41,7 @@ public abstract class Command {
 
         transaction.commit();
 
-        session.close();
+//        session.close();
 
         return result;
     }
