@@ -10,17 +10,21 @@ import pl.agh.dp.loadbalancer.command.Command;
 import javax.annotation.PostConstruct;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class ConnectedState extends DataBaseState {
 
 
     private final DataBaseInstance dataBaseInstance;
 
-    @PostConstruct
-    @Override
-    public void notifyQueryProcessor() {
+    public ConnectedState(DataBaseInstance dataBaseInstance){
+        this.dataBaseInstance = dataBaseInstance;
         this.dataBaseInstance.notifyQueryProcessor();
     }
+
+//    @PostConstruct
+//    @Override
+//    public void notifyQueryProcessor() {
+//        this.dataBaseInstance.notifyQueryProcessor();
+//    }
 
     @Override
     public boolean isConnected() {

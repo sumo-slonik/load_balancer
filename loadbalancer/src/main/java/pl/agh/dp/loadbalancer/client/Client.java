@@ -15,6 +15,9 @@ public class Client {
     static String[] columnNames = {"clubName", "city", "foundationDate", "club_id", "province"};
 
     public static void main(String[] args) {
+
+
+
         String hostname = "localhost";
         int port = 9090;
 
@@ -29,6 +32,14 @@ public class Client {
         System.out.println("lub wpisz 'disconnect' by zakonczyc");
 
         try (Socket socket = new Socket(hostname, port)) {
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
 
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);

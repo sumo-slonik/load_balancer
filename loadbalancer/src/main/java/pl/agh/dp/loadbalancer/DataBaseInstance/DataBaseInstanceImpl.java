@@ -139,7 +139,10 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     }
 
     public void notifyQueryProcessor() {
-        this.queryProcessor.notify();
+
+        synchronized (this.queryProcessor) {
+            this.queryProcessor.notify();
+        }
     }
 
     @Override

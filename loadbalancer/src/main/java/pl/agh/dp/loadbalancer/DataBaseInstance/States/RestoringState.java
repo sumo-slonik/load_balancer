@@ -11,16 +11,22 @@ import pl.agh.dp.loadbalancer.command.QueryType;
 
 import javax.annotation.PostConstruct;
 
-@RequiredArgsConstructor
 public class RestoringState extends DataBaseState {
 
     private final DataBaseInstance dataBaseInstance;
 
-    @PostConstruct
-    @Override
-    public void notifyQueryProcessor() {
-        this.dataBaseInstance.notifyQueryProcessor();
+    public RestoringState(DataBaseInstance dataBaseInstance){
+        this.dataBaseInstance = dataBaseInstance;
+//        this.dataBaseInstance.notifyQueryProcessor();
     }
+
+//    @PostConstruct
+//    @Override
+//    public void notifyQueryProcessor() {
+//
+//        System.out.println("notifyQueryProcessor!!!!!!!!!!!!!!!");
+//
+//    }
 
     @Override
     public void addCommandToQueue() {

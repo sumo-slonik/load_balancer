@@ -13,7 +13,7 @@ public abstract class DataBaseState {
     public abstract DataBaseStates getState();
     public abstract boolean isConnected();
     public abstract void queryProcessorHandle();
-    public abstract void notifyQueryProcessor();
+//    public abstract void notifyQueryProcessor();
 
 
 }

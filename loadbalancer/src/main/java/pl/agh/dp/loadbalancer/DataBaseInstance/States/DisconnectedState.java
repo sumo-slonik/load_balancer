@@ -39,10 +39,10 @@ public class DisconnectedState extends DataBaseState{
 
     }
 
-    @PostConstruct
-    @Override
-    public void notifyQueryProcessor(){
-    }
+//    @PostConstruct
+//    @Override
+//    public void notifyQueryProcessor(){
+//    }
 
     @Override
     public void addCommandToQueue() {
