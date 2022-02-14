@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class Client {
 
     static String[] requests = {"FROM CLUB", "UPDATE CLUB SET",
-            "INSERT INTO CLUB (clubName,city,foundation_date,club_id,province) VALUES club_name,city, foundation_date, club_id,province FROM INSERT_CLUB where club_name = 'nowyklub' ", "DELETE FROM CLUB WHERE"
+            "INSERT ", "DELETE FROM CLUB WHERE"
             , "MinLoad", "RoundRobin","Description"};
 
     static String[] columnNames = {"clubName", "city", "foundationDate", "club_id", "province"};
@@ -110,31 +110,22 @@ public class Client {
                         break;
                     case "2":
 
-                        System.out.println(new Date());
-//                        Scanner insertClubName = new Scanner(System.in);
-//                        System.out.print("Club name: ");
-//                        String clubName = insertClubName.nextLine();
-//
-//                        Scanner insertCity = new Scanner(System.in);
-//                        System.out.print("City: ");
-//                        String city = insertCity.nextLine();
-//
-//                        Scanner insertFoundationDate = new Scanner(System.in);
-//                        System.out.print("Foundation date (format YYYY-MM-DD): ");
-//                        String foundationDate = insertFoundationDate.nextLine();
-//
-//                        Scanner insertClubId = new Scanner(System.in);
-//                        System.out.print("club id: ");
-//                        String clubId = insertClubId.nextLine();
-//
-//                        Scanner insertProvince = new Scanner(System.in);
-//                        System.out.print("Province: ");
-//                        String province = insertProvince.nextLine();
-//
-//                        String insertString = requests[2] + clubName + "','" + city +"',STR_TO_DATE('" + foundationDate+"', '%Y-%M-%d'),'" + clubId +"','" + province +"')";
-//                        System.out.println(insertString);
+                        Scanner insertClubName = new Scanner(System.in);
+                        System.out.print("Club name: ");
+                        String clubName = insertClubName.nextLine();
 
-                        writer.println(requests[2]);
+                        Scanner insertCity = new Scanner(System.in);
+                        System.out.print("City: ");
+                        String city = insertCity.nextLine();
+
+                        Scanner insertProvince = new Scanner(System.in);
+                        System.out.print("Province: ");
+                        String province = insertProvince.nextLine();
+
+                        String insertString = requests[2] + clubName + "," + city +"," + province;
+                        System.out.println(insertString);
+
+                        writer.println(insertString);
                         InputStream insertInput = socket.getInputStream();
                         BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertInput));
 

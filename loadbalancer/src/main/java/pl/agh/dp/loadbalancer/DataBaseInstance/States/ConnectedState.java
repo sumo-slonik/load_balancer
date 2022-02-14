@@ -12,6 +12,7 @@ import pl.agh.dp.loadbalancer.command.QueryType;
 import javax.annotation.PostConstruct;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -86,10 +87,11 @@ public class ConnectedState extends DataBaseState {
                 if(command.queryType.equals(QueryType.INSERT)){
                     databaseSession.beginTransaction();
                     //Add new Employee object
+                    String[] insertParameters = command.getCommand().split(",");
                     Club club = new Club();
-                    club.setClubName("nowy klub testowy 2");
-                    club.setCity("Kraków");
-                    club.setProvince("Podkarpacie");
+                    club.setClubName(insertParameters[0]);
+                    club.setCity(insertParameters[1]);
+                    club.setProvince(insertParameters[2]);
                     Date date1 = null;
                     try {
                         date1=new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");

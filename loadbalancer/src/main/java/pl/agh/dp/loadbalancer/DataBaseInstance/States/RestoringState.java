@@ -90,10 +90,11 @@ public class RestoringState extends DataBaseState {
                         if(command.queryType.equals(QueryType.INSERT)){
                             databaseSession.beginTransaction();
                             //Add new Employee object
+                            String[] insertParameters = command.getCommand().split(",");
                             Club club = new Club();
-                            club.setClubName("nowy klub testowy 2");
-                            club.setCity("Kraków");
-                            club.setProvince("Podkarpacie");
+                            club.setClubName(insertParameters[0]);
+                            club.setCity(insertParameters[1]);
+                            club.setProvince(insertParameters[2]);
                             Date date1 = null;
                             try {
                                 date1=new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");
@@ -111,6 +112,7 @@ public class RestoringState extends DataBaseState {
                             resultQuery = databaseSession.createQuery(command.getCommand());
                             int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
                         }
+
 
                     } catch (HibernateException exception) {
                         System.out.println(exception.toString());
