@@ -116,14 +116,6 @@ public class ConnectedState extends DataBaseState {
             }
 
 
-//            if (resultQuery == null) {
-//                command.setResult("null");
-//            } else {
-//                String res = (String) resultQuery.list().stream().map(club -> club.toString()).collect(Collectors.joining("\n"));
-//
-//                command.setResult(res);
-//            }
-
             if(command.queryType.equals(QueryType.SELECT)){
                 databaseSession.clear();
                 String res = (String) resultQuery.list().stream().map(club -> club.toString()).collect(Collectors.joining("\n"));

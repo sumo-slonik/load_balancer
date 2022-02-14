@@ -162,7 +162,10 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public String getDescription() {
-        return "Data Base " + this.dataBaseNumber + ": url " + this.dataBaseConnectionConfig.getConnectionUrl() + " latency " + this.latency + " " + this.state;
+        return "Data Base " + this.dataBaseNumber +
+                ": url " + this.dataBaseConnectionConfig.getConnectionUrl() +
+                " latency " + this.latency +
+                " " + this.state.toString();
     }
 
     @Override

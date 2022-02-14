@@ -10,6 +10,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.net.*;
 import java.io.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @ComponentScan("pl/agh/dp/loadbalancer/command")
 @RequiredArgsConstructor
@@ -74,7 +76,13 @@ public class RequestServer {
                                     break;
                                 case "INSERT":
                                     System.out.println("obsluga INSERTA");
-                                    writer.println(dbExecutor.performInsert(request));
+                                    Arrays.stream(splitedRequest).forEach(System.out::println);
+                                    writer.println(dbExecutor.
+                                            performInsert(
+                                                    Arrays.stream(
+                                                            Arrays.copyOfRange(splitedRequest, 1, splitedRequest.length)
+                                                    ).collect(Collectors.joining())
+                                            ));
                                     break;
                                 case "UPDATE":
                                     System.out.println("obsluga UPDATE");
