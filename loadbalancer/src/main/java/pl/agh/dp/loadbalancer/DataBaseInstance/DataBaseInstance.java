@@ -63,4 +63,6 @@ public interface DataBaseInstance {
 
     int compareTo(DataBaseInstance instance);
 
+    void ping();
+
 }

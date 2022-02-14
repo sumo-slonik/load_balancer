@@ -26,4 +26,6 @@ public interface DatabasesInterface {
 
     String getConnectedDataBaseDescription();
 
+    String getAllDataBasesDescription();
+
 }

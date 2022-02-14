@@ -99,7 +99,7 @@ public class RequestServer {
                                     databasesInterface.changeBalanceStrategyAsMinLoad();
                                     break;
                                 case "Description":
-                                    writer.println(databasesInterface.getConnectedDataBaseDescription());
+                                    writer.println(databasesInterface.getAllDataBasesDescription());
                                     break;
                             }
 

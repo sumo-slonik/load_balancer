@@ -11,7 +11,6 @@ import pl.agh.dp.loadbalancer.LoadBalancer.RoundRobinStrategy;
 @Configuration
 public class BalanceStrategyConfiguration {
 
-
     @Bean
     BalanceStrategy roundRobin()
     {
@@ -24,8 +23,6 @@ public class BalanceStrategyConfiguration {
         return new MinLoadStrategy();
     }
 
-
-//    loadBalancer
     @Bean
     LoadBalancerInterface loadBalancer()
     {

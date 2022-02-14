@@ -34,7 +34,15 @@ public class ConnectedState extends DataBaseState {
 
     @Override
     public boolean isConnected() {
-        return this.dataBaseInstance.getSession().isConnected();
+        boolean result = true;
+        try
+        {
+            dataBaseInstance.ping();
+        }catch (Exception ex)
+        {
+            result = false;
+        }
+        return result;
     }
 
     @Override

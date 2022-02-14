@@ -61,8 +61,8 @@ public class RestoringState extends DataBaseState {
     public boolean isConnected() {
         boolean result = true;
         try {
-            dataBaseInstance.getConfiguration().buildSessionFactory().openSession();
-        } catch (ServiceException | IllegalStateException ex) {
+            dataBaseInstance.ping();
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
             result = false;
         }

@@ -31,7 +31,6 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
             dataBaseInstance.setDatabasesInterface(this);
         }
         this.loadBalancer.setDbInterface(this);
-//         loadBalancer= new LoadBalancerImpl(this);
     }
 
 
@@ -56,20 +55,9 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
     public void executeSelect(SelectCommand command) {
 
         loadBalancer.chooseDatabase().addCommandToQueue(command);
-
-        //RoundRobinStrategy rrs = new RoundRobinStrategy();
-        //rrs.chooseDatabase(getDatabases()).addCommandToQueue(command);
     }
 
     public List<Club> executeSelect(String command) {
-//        List clubs = firstConfig.getConfiguration().buildSessionFactory().openSession().createSQLQuery("select * from dp_instance_1.clubs;").list();
-//        List<Club> result = new LinkedList<>();
-//        for(Object c : clubs)
-//        {
-//            Club club = new Club((Ocbject[]) c);
-//            result.add(club);
-//        }
-//        return result;
         return null;
     }
 
@@ -89,5 +77,10 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
 
     public String getConnectedDataBaseDescription() {
         return getDatabases().stream().map(DataBaseInstance::getDescription).collect(Collectors.joining("\n"));
+    }
+
+    @Override
+    public String getAllDataBasesDescription() {
+        return databaseInstances.stream().map(DataBaseInstance::getDescription).collect(Collectors.joining("\n"));
     }
 }

@@ -13,11 +13,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class DisconnectedState extends DataBaseState{
+public class DisconnectedState extends DataBaseState {
 
     private final DataBaseInstance dataBaseInstance;
 
-    private void returnSelectsToDatabasesInterface(){
+    private void returnSelectsToDatabasesInterface() {
         List<Command> cudCommands = new LinkedList<>();
         QueryProcessor<Command> queryProcessor = this.dataBaseInstance.getQueryProcesor();
 
@@ -65,7 +65,7 @@ public class DisconnectedState extends DataBaseState{
 
         databaseInstance.setState(new RestoringState(databaseInstance));
 
-        synchronized (this.dataBaseInstance.getQueryProcesor()){
+        synchronized (this.dataBaseInstance.getQueryProcesor()) {
             this.dataBaseInstance.getQueryProcesor().notify();
         }
 
@@ -80,11 +80,9 @@ public class DisconnectedState extends DataBaseState{
     @Override
     public boolean isConnected() {
         boolean result = true;
-        try
-        {
+        try {
             dataBaseInstance.createSession();
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
 //            System.out.println(ex.getMessage());
             result = false;
         }
@@ -103,8 +101,7 @@ public class DisconnectedState extends DataBaseState{
             }
         }
 
-            System.out.println("after wait");
-
+        System.out.println("after wait");
 
 
     }
