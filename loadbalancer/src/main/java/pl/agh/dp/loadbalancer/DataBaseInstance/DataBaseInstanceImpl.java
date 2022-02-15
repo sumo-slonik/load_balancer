@@ -2,7 +2,6 @@ package pl.agh.dp.loadbalancer.DataBaseInstance;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,11 +18,9 @@ import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 
 import javax.annotation.PreDestroy;
 import java.math.BigInteger;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -97,14 +94,13 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void createSession() {
-        this.session = null;
         Boolean succcess = true;
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future future = executor.submit(() -> {
             this.session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
         });
         try {
-            future.get(2, TimeUnit.SECONDS);
+            future.get(4, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
             future.cancel(true);
             succcess=false;
@@ -122,27 +118,8 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void ping() {
-        this.session = null;
-        Boolean succcess = true;
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future future = executor.submit(() -> {
-            dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
-        });
-        try {
-            future.get(2, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-            future.cancel(true);
-            succcess=false;
-        } catch (Exception e) {
-            succcess=false;
-        }
-        finally {
-            executor.shutdownNow();
-        }
-        if(!succcess)
-        {
-            throw new HibernateException("creating seassion takes too long");
-        }
+        dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
+
     }
 
     @Override
@@ -168,21 +145,20 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Override
     public void processQuery(String select) {
 
-//        NativeQuery result = this.dataBaseSession.createSQLQuery(select);
-//        List clubs = result.list();
-//        for(Object c : clubs)
-//        {
-//            Club club = new Club((Object[]) c);
-//            System.out.println(club.toString());
-//        }
     }
 
     public void checkConnection() {
 
+        try
+        {
         if (this.state.isConnected()) {
             establishConnection();
         } else {
             loseConnection();
+        }}
+        catch (Exception ex)
+        {
+            System.out.println("chec connection error");
         }
     }
 
@@ -229,12 +205,16 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void updateLatency() {
+            try
+            {
+                String querry = String.format("SELECT total_latency FROM sys.x$schema_table_statistics; where table_schema = '%s'", getSchemaName());
+                BigInteger a = (BigInteger) this.session.createSQLQuery(String.format("SELECT total_latency FROM sys.x$schema_table_statistics where table_schema = '%s'", getSchemaName())).list().stream().findFirst().orElse(new BigInteger("0"));
+                this.latency = a.longValue();
+            }catch (Exception ex)
+            {
+                System.out.println("problem update latency");
+            }
 
-        if (state.getState().equals(DataBaseStates.CONNECTED)) {
-            String querry = String.format("SELECT total_latency FROM sys.x$schema_table_statistics; where table_schema = '%s'", getSchemaName());
-            BigInteger a = (BigInteger) this.session.createSQLQuery(String.format("SELECT total_latency FROM sys.x$schema_table_statistics where table_schema = '%s'", getSchemaName())).list().stream().findFirst().orElse(new BigInteger("0"));
-            this.latency = a.longValue();
-        }
 
     }
 

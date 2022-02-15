@@ -30,9 +30,15 @@ public class ConnectionChecker {
 
         @Override
         public void run() {
-            System.out.println(databaseInstance.getState()+" "+databaseInstance.getDataBaseNumber()+" "+databaseInstance.getLatency());
-            databaseInstance.checkConnection();
-            databaseInstance.updateLatency();
+            try {
+                    System.out.println(databaseInstance.getState() + " " + databaseInstance.getDataBaseNumber() + " " + databaseInstance.getLatency());
+                    databaseInstance.checkConnection();
+                }
+                catch(Exception ex)
+                {
+                    System.out.println("wyjątek connection checker się");
+                    System.out.println(ex.getMessage());
+                }
         }
     }
 

@@ -37,7 +37,7 @@ public class ConnectedState extends DataBaseState {
         boolean result = true;
         try
         {
-            dataBaseInstance.createSession();
+            dataBaseInstance.ping();
         }catch (Exception ex)
         {
             result = false;

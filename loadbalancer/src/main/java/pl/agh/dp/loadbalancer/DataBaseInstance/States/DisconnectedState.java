@@ -81,7 +81,7 @@ public class DisconnectedState extends DataBaseState {
     public boolean isConnected() {
         boolean result = true;
         try {
-            dataBaseInstance.createSession();
+            dataBaseInstance.ping();
         } catch (Exception ex) {
 //            System.out.println(ex.getMessage());
             result = false;
