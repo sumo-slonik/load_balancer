@@ -49,67 +49,14 @@ public class RequestServer {
                     Socket socket = serverSocket.accept();
                     System.out.println("New client connected");
 
-                    InputStream input = socket.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                    System.out.println("New client connected"
+                            + socket.getInetAddress()
+                            .getHostAddress());
 
-                    OutputStream output = socket.getOutputStream();
-                    PrintWriter writer = new PrintWriter(output, true);
+                    ClientHandler clientSock
+                            = new ClientHandler(socket, databasesInterface, this.databasesExecutor);
 
-                    String request;
-
-                    request = reader.readLine();
-                    while (request != null && !request.equals("disconnect")) {
-                        System.out.println(request);
-
-                        // Tu obsluga zapytania
-                        String[] splitedRequest = request.split(" ");
-                        if (splitedRequest.length > 0) {
-                            switch (splitedRequest[0]) {
-                                case "FROM":
-                                    System.out.println("obsluga selecta");
-                                    String res = dbExecutor.performSelect(request);
-                                    writer.println(res);
-                                    break;
-                                case "DELETE":
-                                    System.out.println("obsluga DELETE");
-                                    writer.println(dbExecutor.performDelete(request));
-                                    break;
-                                case "INSERT":
-                                    System.out.println("obsluga INSERTA");
-                                    Arrays.stream(splitedRequest).forEach(System.out::println);
-                                    writer.println(dbExecutor.
-                                            performInsert(
-                                                    Arrays.stream(
-                                                            Arrays.copyOfRange(splitedRequest, 1, splitedRequest.length)
-                                                    ).collect(Collectors.joining())
-                                            ));
-                                    break;
-                                case "UPDATE":
-                                    System.out.println("obsluga UPDATE");
-                                    writer.println(dbExecutor.performUpdate(request));
-                                    break;
-                                case "RoundRobin":
-                                    System.out.println("zmiana na RoundRobin");
-                                    writer.println("zmiana na RoundRobin");
-                                    databasesInterface.changeBalanceStrategyAsRoundRobin();
-                                    break;
-                                case "MinLoad":
-                                    System.out.println("changed to na MinLoad");
-                                    writer.println("changed to na MinLoad");
-                                    databasesInterface.changeBalanceStrategyAsMinLoad();
-                                    break;
-                                case "Description":
-                                    writer.println(databasesInterface.getAllDataBasesDescription());
-                                    break;
-                            }
-
-
-                        }
-                        writer.println("streamEndedSeq");
-
-                        request = reader.readLine();
-                    }
-                    socket.close();
+                    new Thread(clientSock).start();
                 }
 
             } catch (IOException ex) {
