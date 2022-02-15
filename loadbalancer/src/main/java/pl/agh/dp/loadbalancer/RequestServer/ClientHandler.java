@@ -22,69 +22,73 @@ public class ClientHandler implements Runnable{
         this.databasesExecutor = databasesExecutor;
     }
 
-    @SneakyThrows
     @Override
     public void run() {
-        InputStream input = socket.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        try {
+            InputStream input = socket.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
-        OutputStream output = socket.getOutputStream();
-        PrintWriter writer = new PrintWriter(output, true);
+            OutputStream output = socket.getOutputStream();
+            PrintWriter writer = new PrintWriter(output, true);
 
-        String request;
-
-        request = reader.readLine();
-        while (request != null && !request.equals("disconnect")) {
-            System.out.println(request);
-
-            // Tu obsluga zapytania
-            String[] splitedRequest = request.split(" ");
-            if (splitedRequest.length > 0) {
-                switch (splitedRequest[0]) {
-                    case "FROM":
-                        System.out.println("obsluga selecta");
-                        String res = databasesExecutor.performSelect(request);
-                        writer.println(res);
-                        break;
-                    case "DELETE":
-                        System.out.println("obsluga DELETE");
-                        writer.println(databasesExecutor.performDelete(request));
-                        break;
-                    case "INSERT":
-                        System.out.println("obsluga INSERTA");
-                        Arrays.stream(splitedRequest).forEach(System.out::println);
-                        writer.println(databasesExecutor.
-                                performInsert(
-                                        Arrays.stream(
-                                                Arrays.copyOfRange(splitedRequest, 1, splitedRequest.length)
-                                        ).collect(Collectors.joining())
-                                ));
-                        break;
-                    case "UPDATE":
-                        System.out.println("obsluga UPDATE");
-                        writer.println(databasesExecutor.performUpdate(request));
-                        break;
-                    case "RoundRobin":
-                        System.out.println("zmiana na RoundRobin");
-                        writer.println("zmiana na RoundRobin");
-                        databasesInterface.changeBalanceStrategyAsRoundRobin();
-                        break;
-                    case "MinLoad":
-                        System.out.println("changed to na MinLoad");
-                        writer.println("changed to na MinLoad");
-                        databasesInterface.changeBalanceStrategyAsMinLoad();
-                        break;
-                    case "Description":
-                        writer.println(databasesInterface.getAllDataBasesDescription());
-                        break;
-                }
-
-
-            }
-            writer.println("streamEndedSeq");
+            String request;
 
             request = reader.readLine();
+            while (request != null && !request.equals("disconnect")) {
+                System.out.println(request);
+
+                // Tu obsluga zapytania
+                String[] splitedRequest = request.split(" ");
+                if (splitedRequest.length > 0) {
+                    switch (splitedRequest[0]) {
+                        case "FROM":
+                            System.out.println("obsluga selecta");
+                            String res = databasesExecutor.performSelect(request);
+                            writer.println(res);
+                            break;
+                        case "DELETE":
+                            System.out.println("obsluga DELETE");
+                            writer.println(databasesExecutor.performDelete(request));
+                            break;
+                        case "INSERT":
+                            System.out.println("obsluga INSERTA");
+                            Arrays.stream(splitedRequest).forEach(System.out::println);
+                            writer.println(databasesExecutor.
+                                    performInsert(
+                                            Arrays.stream(
+                                                    Arrays.copyOfRange(splitedRequest, 1, splitedRequest.length)
+                                            ).collect(Collectors.joining())
+                                    ));
+                            break;
+                        case "UPDATE":
+                            System.out.println("obsluga UPDATE");
+                            writer.println(databasesExecutor.performUpdate(request));
+                            break;
+                        case "RoundRobin":
+                            System.out.println("zmiana na RoundRobin");
+                            writer.println("zmiana na RoundRobin");
+                            databasesInterface.changeBalanceStrategyAsRoundRobin();
+                            break;
+                        case "MinLoad":
+                            System.out.println("changed to na MinLoad");
+                            writer.println("changed to na MinLoad");
+                            databasesInterface.changeBalanceStrategyAsMinLoad();
+                            break;
+                        case "Description":
+                            writer.println(databasesInterface.getAllDataBasesDescription());
+                            break;
+                    }
+
+
+                }
+                writer.println("streamEndedSeq");
+
+                request = reader.readLine();
+            }
+            socket.close();
         }
-        socket.close();
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
