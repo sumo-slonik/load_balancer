@@ -61,7 +61,7 @@ public class RestoringState extends DataBaseState {
     public boolean isConnected() {
         boolean result = true;
         try {
-            dataBaseInstance.ping();
+            dataBaseInstance.createSession();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             result = false;
