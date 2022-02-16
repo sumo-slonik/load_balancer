@@ -33,6 +33,7 @@ public class ConnectionChecker {
             Thread t = new Thread(()-> {
                 if (databaseInstance.checkConnection()) {
                     databaseInstance.establishConnection();
+                    databaseInstance.updateLatency();
                 } else {
                     databaseInstance.loseConnection();
                 }

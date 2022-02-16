@@ -9,6 +9,8 @@ import pl.agh.dp.loadbalancer.command.QueryType;
 import pl.agh.dp.loadbalancer.command.SelectCommand;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class DisconnectedState extends DataBaseState {
                 }
             }
             System.out.println("");
-
+//            Collections.reverse(cudCommands);
             cudCommands.forEach(queryProcessor::addCommandToQueue);
 
         }

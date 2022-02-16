@@ -37,7 +37,7 @@ public class QueryProcessor<T extends Command> implements Runnable {
                     if (isEnd) {
                         return;
                     }
-                    System.out.println("query processor loop");
+//                    System.out.println("query processor loop");
                     try {
 
 

@@ -60,7 +60,7 @@ public class ConnectedState extends DataBaseState {
         Command command;
         synchronized (this.dataBaseInstance.getQueryProcesor()) {
 
-            System.out.println("before get connected state");
+//            System.out.println("before get connected state");
             command = this.dataBaseInstance.getQueryProcesor().getCommand();
             if(command == null){ // interruptException happened or get time took too long
                 return;

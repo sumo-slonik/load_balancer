@@ -7,6 +7,7 @@ import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LoadBalancerImpl implements LoadBalancerInterface {
 
@@ -22,8 +23,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface {
     private BalanceStrategy minLoad;
 
     @PostConstruct
-    public void init()
-    {
+    public void init() {
         setBalanceStrategy(false);
     }
 
@@ -37,12 +37,7 @@ public class LoadBalancerImpl implements LoadBalancerInterface {
 
     private void updateDatabaseList() {
         List<DataBaseInstance> currentDatabases = dbInterface.getDatabases();
-        for (DataBaseInstance database : currentDatabases) {
-            if (databases.contains(database) && (database.getState() == DataBaseStates.DISCONNECTED || database.getState() == DataBaseStates.RESTORING))
-                databases.remove(database);
-            else if (!databases.contains(database) && database.getState() == DataBaseStates.CONNECTED)
-                databases.add(database);
-        }
+        databases = dbInterface.getDatabases().stream().filter(base -> base.getState().equals(DataBaseStates.CONNECTED)).collect(Collectors.toList());
     }
 
     public DataBaseInstance chooseDatabase() {

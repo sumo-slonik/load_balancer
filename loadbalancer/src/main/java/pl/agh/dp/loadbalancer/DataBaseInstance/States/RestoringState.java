@@ -66,7 +66,9 @@ public class RestoringState extends DataBaseState {
             } else {
 
                 Command command = this.dataBaseInstance.getQueryProcesor().getCommand();
-
+                if(command == null){ // interruptException happened or get time took too long
+                    return;
+                }
                 if (!command.getQueryType().equals(QueryType.SELECT)) {
 
                     Session databaseSession = this.dataBaseInstance.getSession();
@@ -97,6 +99,7 @@ public class RestoringState extends DataBaseState {
                         else
                         {
                             resultQuery = databaseSession.createQuery(command.getCommand());
+                            resultQuery.setCacheable(false);
                             int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
                         }
 

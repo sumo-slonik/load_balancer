@@ -97,6 +97,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void ping() {
+        dataBaseConnectionConfig.getConfiguration().buildSessionFactory().close();
         Session session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
         session.close();
     }
@@ -121,7 +122,7 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     }
 
     public Boolean checkConnection() {
-        System.out.println("checkConnection!!!");
+//        System.out.println("checkConnection!!!");
         return this.state.isConnected();
     }
 
@@ -169,10 +170,15 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
     @Override
     public void updateLatency() {
 
+        try
+        {
         if (state.getState().equals(DataBaseStates.CONNECTED)) {
             String querry = String.format("SELECT total_latency FROM sys.x$schema_table_statistics; where table_schema = '%s'", getSchemaName());
             BigInteger a = (BigInteger) this.session.createSQLQuery(String.format("SELECT total_latency FROM sys.x$schema_table_statistics where table_schema = '%s'", getSchemaName())).list().stream().findFirst().orElse(new BigInteger("0"));
             this.latency = a.longValue();
+        }}catch (Exception ex)
+        {
+            this.latency = Long.MAX_VALUE;
         }
 
     }
