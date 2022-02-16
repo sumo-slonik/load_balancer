@@ -2,8 +2,6 @@ package pl.agh.dp.loadbalancer.DataBaseInstance;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.bytebuddy.implementation.bytecode.Throw;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -19,14 +17,6 @@ import pl.agh.dp.loadbalancer.data.acces.domain.infra.datasource.DataBaseNumber;
 
 import javax.annotation.PreDestroy;
 import java.math.BigInteger;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class DataBaseInstanceImpl implements DataBaseInstance {
 
@@ -97,52 +87,18 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 
     @Override
     public void createSession() {
-        this.session = null;
-        Boolean succcess = true;
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future future = executor.submit(() -> {
+            if (this.session != null)
+            {
+                this.session.close();
+                this.session = null;
+            }
             this.session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
-        });
-        try {
-            future.get(2, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-            future.cancel(true);
-            succcess=false;
-        } catch (Exception e) {
-            succcess=false;
-        }
-        finally {
-            executor.shutdownNow();
-        }
-        if(!succcess)
-        {
-            throw new HibernateException("creating seassion takes too long");
-        }
     }
 
     @Override
     public void ping() {
-        this.session = null;
-        Boolean succcess = true;
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future future = executor.submit(() -> {
-            dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
-        });
-        try {
-            future.get(2, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-            future.cancel(true);
-            succcess=false;
-        } catch (Exception e) {
-            succcess=false;
-        }
-        finally {
-            executor.shutdownNow();
-        }
-        if(!succcess)
-        {
-            throw new HibernateException("creating seassion takes too long");
-        }
+        Session session = dataBaseConnectionConfig.getConfiguration().buildSessionFactory().openSession();
+        session.close();
     }
 
     @Override
@@ -177,13 +133,8 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
 //        }
     }
 
-    public void checkConnection() {
-
-        if (this.state.isConnected()) {
-            establishConnection();
-        } else {
-            loseConnection();
-        }
+    public Boolean checkConnection() {
+        return this.state.isConnected();
     }
 
     @Override

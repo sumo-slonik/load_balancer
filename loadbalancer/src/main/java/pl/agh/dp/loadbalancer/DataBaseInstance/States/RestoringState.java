@@ -21,16 +21,10 @@ public class RestoringState extends DataBaseState {
 
     public RestoringState(DataBaseInstance dataBaseInstance){
         this.dataBaseInstance = dataBaseInstance;
-//        this.dataBaseInstance.notifyQueryProcessor();
+        System.out.println("tutaj byłem");
     }
 
-//    @PostConstruct
-//    @Override
-//    public void notifyQueryProcessor() {
-//
-//        System.out.println("notifyQueryProcessor!!!!!!!!!!!!!!!");
-//
-//    }
+
 
     @Override
     public void addCommandToQueue() {
@@ -49,7 +43,7 @@ public class RestoringState extends DataBaseState {
 
     @Override
     public void establishConnection(DataBaseInstance databaseInstance) {
-        databaseInstance.setState(new ConnectedState(dataBaseInstance));
+//        databaseInstance.setState(new ConnectedState(dataBaseInstance));
     }
 
     @Override
@@ -75,7 +69,7 @@ public class RestoringState extends DataBaseState {
         synchronized (this.dataBaseInstance.getQueryProcesor()) {
 
             if (dataBaseInstance.hasEmptyQueue()) {
-                establishConnection(dataBaseInstance);
+                dataBaseInstance.setState(new ConnectedState(dataBaseInstance));
             } else {
 
                 Command command = this.dataBaseInstance.getQueryProcesor().getCommand();

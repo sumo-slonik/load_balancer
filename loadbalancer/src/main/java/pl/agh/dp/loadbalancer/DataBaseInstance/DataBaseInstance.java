@@ -32,7 +32,7 @@ public interface DataBaseInstance {
 
     void createSession();
 
-    void checkConnection();
+    Boolean checkConnection();
 
     QueryProcessor<Command> getQueryProcesor();
 
