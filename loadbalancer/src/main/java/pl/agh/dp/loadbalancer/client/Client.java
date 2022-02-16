@@ -10,7 +10,7 @@ public class Client {
 
     static String[] requests = {"FROM CLUB", "UPDATE CLUB SET",
             "INSERT ", "DELETE FROM CLUB WHERE"
-            , "MinLoad", "RoundRobin","Description"};
+            , "MinLoad", "RoundRobin","Description", "FROM CLUB WHERE"};
 
     static String[] columnNames = {"clubName", "city", "foundationDate", "club_id", "province"};
 
@@ -26,7 +26,8 @@ public class Client {
         System.out.println("3 - " + requests[3]);
         System.out.println("4 - " + requests[4]);
         System.out.println("5 - " + requests[5]);
-        System.out.println("6- " +  requests[6]);
+        System.out.println("6 - " +  requests[6]);
+        System.out.println("7 - " +  requests[7]);
         System.out.println("lub wpisz 'disconnect' by zakonczyc");
 
         try (Socket socket = new Socket(hostname, port)) {
@@ -193,6 +194,36 @@ public class Client {
                         BufferedReader changeStrategyRender2 = new BufferedReader(new InputStreamReader(changeStrategy2));
 
                         getOutput(changeStrategyRender2);
+                        break;
+                    case "7":
+                        for (int i = 0; i < columnNames.length; i++) {
+                            System.out.println(i + "-" + columnNames[i]);
+                        }
+
+                        Scanner selectColumnNameScanner = new Scanner(System.in);
+                        System.out.println("Where column");
+                        System.out.print("Enter a number: ");
+                        String selectWhereColumnNameInput = selectColumnNameScanner.nextLine();
+
+                        int selectWhereColumnNameInputInt = Integer.parseInt(selectWhereColumnNameInput);
+
+                        System.out.println("where:");
+                        Scanner selectWhereScanner = new Scanner(System.in);
+                        System.out.print("where " + columnNames[selectWhereColumnNameInputInt] + "=");
+                        String selectWhereInput = selectWhereScanner.nextLine();
+
+                        if (selectWhereColumnNameInputInt >= 0 && selectWhereColumnNameInputInt < columnNames.length) {
+
+                            String selectRequest = requests[7] + " " + columnNames[selectWhereColumnNameInputInt] + "=" + selectWhereInput;
+                            System.out.println(selectRequest);
+
+                            writer.println(selectRequest);
+                            InputStream selectInput = socket.getInputStream();
+                            BufferedReader selectReader = new BufferedReader(new InputStreamReader(selectInput));
+
+                            getOutput(selectReader);
+                        }
+
                         break;
 
                 }
