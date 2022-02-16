@@ -36,7 +36,6 @@ public class LoadBalancerImpl implements LoadBalancerInterface {
     }
 
     private void updateDatabaseList() {
-        List<DataBaseInstance> currentDatabases = dbInterface.getDatabases();
         databases = dbInterface.getDatabases().stream().filter(base -> base.getState().equals(DataBaseStates.CONNECTED)).collect(Collectors.toList());
     }
 

@@ -2,6 +2,8 @@ package pl.agh.dp.loadbalancer.client;
 
 import java.net.*;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -123,7 +125,18 @@ public class Client {
                         System.out.print("Province: ");
                         String province = insertProvince.nextLine();
 
-                        String insertString = requests[2] + clubName + "," + city +"," + province;
+                        Date date = null;
+                        try {
+                            date = new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+//                        String insertString = requests[2] + clubName + "," + city +"," + province;
+                        String insertString = String.format(
+                                "insert into clubs (club_name, city, foundation_date, club_id, province) values(%s,%s,%s,%d,%s)",
+                                clubName, city, date.toString(), 5, province
+                        );
                         System.out.println(insertString);
 
                         writer.println(insertString);
