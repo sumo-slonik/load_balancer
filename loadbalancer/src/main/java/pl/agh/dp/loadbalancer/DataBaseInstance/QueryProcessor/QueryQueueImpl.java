@@ -6,16 +6,13 @@ import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstanceImpl;
 import pl.agh.dp.loadbalancer.DataBaseInstance.QueryProcessor.QueryQueue;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class QueryQueueImpl<T> implements QueryQueue<T> {
 
     @Setter
     @Getter
     private LinkedBlockingQueue<T> queue;
-
-    public QueryQueueImpl(LinkedBlockingQueue<T> queue) {
-        this.queue = queue;
-    }
 
     public QueryQueueImpl() {
 
@@ -29,7 +26,7 @@ public class QueryQueueImpl<T> implements QueryQueue<T> {
     public T get() {
 
         try {
-            return queue.take();
+            return queue.poll(1, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

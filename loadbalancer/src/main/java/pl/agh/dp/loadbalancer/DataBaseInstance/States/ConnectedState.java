@@ -3,6 +3,7 @@ package pl.agh.dp.loadbalancer.DataBaseInstance.States;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import pl.agh.dp.loadbalancer.ClubPackage.Club;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
@@ -26,12 +27,6 @@ public class ConnectedState extends DataBaseState {
         this.dataBaseInstance.notifyQueryProcessor();
     }
 
-//    @PostConstruct
-//    @Override
-//    public void notifyQueryProcessor() {
-//        this.dataBaseInstance.notifyQueryProcessor();
-//    }
-
     @Override
     public boolean isConnected() {
         boolean result = true;
@@ -43,16 +38,6 @@ public class ConnectedState extends DataBaseState {
             result = false;
         }
         return result;
-    }
-
-    @Override
-    public void addCommandToQueue() {
-
-    }
-
-    @Override
-    public void processCommandFromQueue() {
-
     }
 
     @Override
@@ -77,6 +62,9 @@ public class ConnectedState extends DataBaseState {
 
             System.out.println("before get connected state");
             command = this.dataBaseInstance.getQueryProcesor().getCommand();
+            if(command == null){ // interruptException happened or get time took too long
+                return;
+            }
         }
         synchronized (command) {
             System.out.println("after get " + command.getCommand());
@@ -85,9 +73,6 @@ public class ConnectedState extends DataBaseState {
 
             Query resultQuery = null;
             int transactionResult;
-
-
-//            if(command.queryType.equals(QueryType.))
 
 
             try{
@@ -115,6 +100,7 @@ public class ConnectedState extends DataBaseState {
                 else
                 {
                     resultQuery = databaseSession.createQuery(command.getCommand());
+                    resultQuery.setCacheable(false);
                     transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
                 }
 

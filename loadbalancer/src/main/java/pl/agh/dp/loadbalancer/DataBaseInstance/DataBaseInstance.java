@@ -38,9 +38,6 @@ public interface DataBaseInstance {
 
     DataBaseConnectionConfig getDataBaseConnectionConfig();
 
-    //  tutaj walniesz zamiast selecta swojego comanda
-    void processQuery(String query);
-
     void notifyQueryProcessor();
 
     DataBaseState getStateObject();

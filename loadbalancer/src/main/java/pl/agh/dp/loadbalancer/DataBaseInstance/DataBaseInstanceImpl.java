@@ -120,20 +120,8 @@ public class DataBaseInstanceImpl implements DataBaseInstance {
         return getConfiguration().buildSessionFactory();
     }
 
-
-    @Override
-    public void processQuery(String select) {
-
-//        NativeQuery result = this.dataBaseSession.createSQLQuery(select);
-//        List clubs = result.list();
-//        for(Object c : clubs)
-//        {
-//            Club club = new Club((Object[]) c);
-//            System.out.println(club.toString());
-//        }
-    }
-
     public Boolean checkConnection() {
+        System.out.println("checkConnection!!!");
         return this.state.isConnected();
     }
 

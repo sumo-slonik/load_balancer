@@ -17,13 +17,17 @@ public class DisconnectedState extends DataBaseState {
 
     private final DataBaseInstance dataBaseInstance;
 
+
+
     private void returnSelectsToDatabasesInterface() {
         List<Command> cudCommands = new LinkedList<>();
         QueryProcessor<Command> queryProcessor = this.dataBaseInstance.getQueryProcesor();
 
+
         synchronized (queryProcessor) {
 
             while (!queryProcessor.hasEmptyQueue()) {
+                System.out.print("r");
                 Command command = queryProcessor.getCommand();
 
                 if (command.getQueryType().equals(QueryType.SELECT)) {
@@ -32,25 +36,11 @@ public class DisconnectedState extends DataBaseState {
                     cudCommands.add(command);
                 }
             }
+            System.out.println("");
 
             cudCommands.forEach(queryProcessor::addCommandToQueue);
 
         }
-
-    }
-
-//    @PostConstruct
-//    @Override
-//    public void notifyQueryProcessor(){
-//    }
-
-    @Override
-    public void addCommandToQueue() {
-
-    }
-
-    @Override
-    public void processCommandFromQueue() {
 
     }
 

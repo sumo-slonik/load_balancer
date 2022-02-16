@@ -24,18 +24,6 @@ public class RestoringState extends DataBaseState {
         System.out.println("tutaj byłem");
     }
 
-
-
-    @Override
-    public void addCommandToQueue() {
-
-    }
-
-    @Override
-    public void processCommandFromQueue() {
-
-    }
-
     @Override
     public void loseConnection(DataBaseInstance databaseInstance) {
         databaseInstance.setState(new DisconnectedState(dataBaseInstance));
@@ -55,7 +43,9 @@ public class RestoringState extends DataBaseState {
     public boolean isConnected() {
         boolean result = true;
         try {
+            System.out.print("tworzenie sesji: ");
             dataBaseInstance.createSession();
+            System.out.println(dataBaseInstance.getSession());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             result = false;
@@ -66,9 +56,12 @@ public class RestoringState extends DataBaseState {
     @Override
     public void queryProcessorHandle() {
 
+        System.out.println("restoringState queryProcessorHandle");
+
         synchronized (this.dataBaseInstance.getQueryProcesor()) {
 
             if (dataBaseInstance.hasEmptyQueue()) {
+                dataBaseInstance.createSession();
                 dataBaseInstance.setState(new ConnectedState(dataBaseInstance));
             } else {
 

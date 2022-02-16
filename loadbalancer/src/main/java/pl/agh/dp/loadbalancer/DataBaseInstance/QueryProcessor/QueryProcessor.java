@@ -24,10 +24,6 @@ public class QueryProcessor<T extends Command> implements Runnable {
 
     }
 
-    public QueryProcessor(QueryQueue<T> queryQueue){
-        this.queryQueue = queryQueue;
-    }
-
     public T getCommand(){
         return this.queryQueue.get();
     }
@@ -42,7 +38,14 @@ public class QueryProcessor<T extends Command> implements Runnable {
                         return;
                     }
                     System.out.println("query processor loop");
-                    this.databaseInstance.getStateObject().queryProcessorHandle();
+                    try {
+
+
+                        this.databaseInstance.getStateObject().queryProcessorHandle();
+                    } catch (Exception ex){
+                        System.out.println("queryProcessorHandle exception");
+                        System.out.println(ex.getMessage());
+                    }
                 }
             }
         }catch (Exception ex)
