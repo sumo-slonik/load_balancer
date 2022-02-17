@@ -53,12 +53,13 @@ public class ClientHandler implements Runnable{
                         case "INSERT":
                             System.out.println("obsluga INSERTA");
                             Arrays.stream(splitedRequest).forEach(System.out::println);
-                            writer.println(databasesExecutor.
-                                    performInsert(
-                                            Arrays.stream(
-                                                    Arrays.copyOfRange(splitedRequest, 1, splitedRequest.length)
-                                            ).collect(Collectors.joining())
-                                    ));
+//                            writer.println(databasesExecutor.
+//                                    performInsert(
+//                                            Arrays.stream(
+//                                                    Arrays.copyOfRange(splitedRequest, 1, splitedRequest.length)
+//                                            ).collect(Collectors.joining())
+//                                    ));
+                            writer.println(databasesExecutor.performInsert(request));
                             break;
                         case "UPDATE":
                             System.out.println("obsluga UPDATE");
