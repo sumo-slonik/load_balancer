@@ -16,34 +16,20 @@ public abstract class DataBaseState {
     public abstract void queryProcessorHandle();
 
     public void handleInsert(String insertQuery, Session databaseSession){
-
         if(! insertQuery.toLowerCase().startsWith("insert")){
             return;
         }
-
         Query query;
-
         if(insertQuery.toLowerCase().contains("values")){ // insert into values case
             System.out.println("jestem w insercie");
             System.out.println(insertQuery);
             query = databaseSession.createSQLQuery(insertQuery);
-
-        } else if(insertQuery.toLowerCase().contains("select") ) { // insert into ... select ... case
-            query = databaseSession.createQuery(insertQuery);
-
         }
         else{
             return;
         }
-
         if(query !=  null) {
-            System.out.println(query+"query nie jest nullem");
             query.executeUpdate();
-
         }
-
-
     }
-
-
 }

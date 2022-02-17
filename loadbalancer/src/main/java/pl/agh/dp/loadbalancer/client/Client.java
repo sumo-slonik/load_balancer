@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 
 public class Client {
 
-    static String[] requests = {"FROM CLUB", "UPDATE CLUB SET",
-            "INSERT ", "DELETE FROM CLUB WHERE"
-            , "MinLoad", "RoundRobin","Description", "FROM CLUB WHERE", "INSERT INTO ... SELECT ..."};
+    static String[] requests = {"SELECT * FROM CLUBS_TABLE", "UPDATE CLUBS_TABLE SET",
+            "INSERT ", "DELETE FROM CLUBS_TABLE WHERE"
+            , "MinLoad", "RoundRobin","Description", "SELECT * FROM CLUBS_TABLE WHERE"};
 
-    static String[] columnNames = {"clubName", "city", "foundationDate", "club_id", "province"};
+    static String[] columnNames = {"club_name", "city", "foundation_date", "club_id", "province"};
 
     public static void main(String[] args) {
 
@@ -30,7 +30,6 @@ public class Client {
         System.out.println("5 - " + requests[5]);
         System.out.println("6 - " + requests[6]);
         System.out.println("7 - " + requests[7]);
-        System.out.println("8 - " + requests[8]);
         System.out.println("lub wpisz 'disconnect' by zakonczyc");
 
         try (Socket socket = new Socket(hostname, port)) {
@@ -132,17 +131,15 @@ public class Client {
                             e.printStackTrace();
                         }
 
-//                        String insertString = requests[2] + clubName + "," + city +"," + province;
                         String insertString = String.format(
-                                "INSERT INTO CLUBS_TABLE(club_name,city,foundation_date,club_id,province) VALUES('%s','%s','%s',%d,'%s')",
-                                clubName, city, date.toString(), 5, province
+                                "INSERT INTO CLUBS_TABLE(club_name,city,foundation_date,province) VALUES('%s','%s','%s','%s')",
+                                clubName, city, "2022-02-02", province
                         );
                         System.out.println(insertString);
 
                         writer.println(insertString);
                         InputStream insertInput = socket.getInputStream();
                         BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertInput));
-
                         getOutput(insertReader);
 
                         break;
@@ -154,19 +151,15 @@ public class Client {
                         Scanner deleteColumnNameScanner = new Scanner(System.in);
                         System.out.print("Enter a number: ");
                         String deleteColumnNameInput = deleteColumnNameScanner.nextLine();
-
                         int deleteColumnNameInputInt = Integer.parseInt(deleteColumnNameInput);
-
                         System.out.println("where:");
                         Scanner deleteWhereScanner = new Scanner(System.in);
                         System.out.print("where " + columnNames[deleteColumnNameInputInt] + "=");
                         String deleteWhereInput = deleteWhereScanner.nextLine();
 
                         if (deleteColumnNameInputInt < columnNames.length) {
-
                             String deleteRequest = requests[3] + " " + columnNames[deleteColumnNameInputInt] + "=" + deleteWhereInput;
                             System.out.println(deleteRequest);
-
                             writer.println(deleteRequest);
                             InputStream deleteInput = socket.getInputStream();
                             BufferedReader deleteReader = new BufferedReader(new InputStreamReader(deleteInput));
@@ -180,9 +173,7 @@ public class Client {
                         writer.println(deleteRequest);
                         InputStream changeStrategy = socket.getInputStream();
                         BufferedReader changeStrategyRender = new BufferedReader(new InputStreamReader(changeStrategy));
-
                         getOutput(changeStrategyRender);
-
                         break;
                     case "5":
                         String RQ = requests[5];
@@ -190,14 +181,7 @@ public class Client {
                         writer.println(RQ);
                         InputStream changeStrategy1 = socket.getInputStream();
                         BufferedReader changeStrategyRender1 = new BufferedReader(new InputStreamReader(changeStrategy1));
-
                         getOutput(changeStrategyRender1);
-//                        String outputLine1;
-//                        outputLine1 = changeStrategyRender1.readLine();
-//                        while (!outputLine1.equals("streamEndedSeq")) {
-//                            System.out.println(outputLine1);
-//                            outputLine1 = changeStrategyRender1.readLine();
-//                        }
                         break;
                     case "6":
                         String RQ1 = requests[6];
@@ -239,59 +223,8 @@ public class Client {
 
                         break;
 
-                    case "8":
-
-                        insertString = "INSERT INTO CLUB(club_name, city, foundation_date, club_id, province)";
-
-//                        Scanner insert2ClubName = new Scanner(System.in);
-//                        System.out.print("Club name: ");
-//                        String club2Name = insert2ClubName.nextLine();
-//
-//                        Scanner insert2City = new Scanner(System.in);
-//                        System.out.print("City: ");
-//                        String city2 = insert2City.nextLine();
-//
-//                        Scanner insert2Province = new Scanner(System.in);
-//                        System.out.print("Province: ");
-//                        String province2 = insert2Province.nextLine();
-//
-//                        Date date2 = null;
-//                        try {
-//                            date = new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                        }
-//
-////                        String insertString = requests[2] + clubName + "," + city +"," + province;
-//                        String insertString = String.format(
-//                                "insert into clubs (club_name, city, foundation_date, club_id, province) values(%s,%s,%s,%d,%s)",
-//                                clubName, city, date.toString(), 5, province
-//                        );
-//                        System.out.println(insertString);
-//
-//                        writer.println(insertString);
-//                        InputStream insertInput = socket.getInputStream();
-//                        BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertInput));
-//
-//                        getOutput(insertReader);
-
-
-                        break;
-
 
                 }
-
-//                if(text.equals("0") || text.equals("1") ||text.equals("2") ||text.equals("3") ){
-//                    int position = Integer.parseInt(text);
-//
-//                    writer.println(requests[position]);
-//                    InputStream input = socket.getInputStream();
-//                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-//
-//
-//                    String server_answer = reader.readLine();
-//                    System.out.println(server_answer);
-//                }
 
                 System.out.print("Enter a string: ");
                 text = sc.nextLine();

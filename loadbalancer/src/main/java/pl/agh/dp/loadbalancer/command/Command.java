@@ -36,9 +36,7 @@ public abstract class Command {
         }
 
         session.beginTransaction();
-
         int result = updateQuery.executeUpdate();
-
         session.getTransaction().commit();
 
 

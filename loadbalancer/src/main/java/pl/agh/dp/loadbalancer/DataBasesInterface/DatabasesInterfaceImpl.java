@@ -53,7 +53,6 @@ public class DatabasesInterfaceImpl implements DatabasesInterface {
 
     @Override
     public void executeSelect(SelectCommand command) {
-
         loadBalancer.chooseDatabase().addCommandToQueue(command);
     }
 

@@ -29,7 +29,6 @@ public class DisconnectedState extends DataBaseState {
         synchronized (queryProcessor) {
 
             while (!queryProcessor.hasEmptyQueue()) {
-                System.out.print("r");
                 Command command = queryProcessor.getCommand();
 
                 if (command.getQueryType().equals(QueryType.SELECT)) {
@@ -38,8 +37,6 @@ public class DisconnectedState extends DataBaseState {
                     cudCommands.add(command);
                 }
             }
-            System.out.println("");
-//            Collections.reverse(cudCommands);
             cudCommands.forEach(queryProcessor::addCommandToQueue);
 
         }
@@ -75,7 +72,6 @@ public class DisconnectedState extends DataBaseState {
         try {
             dataBaseInstance.ping();
         } catch (Exception ex) {
-//            System.out.println(ex.getMessage());
             result = false;
         }
         return result;
@@ -86,16 +82,11 @@ public class DisconnectedState extends DataBaseState {
         synchronized (this.dataBaseInstance.getQueryProcesor()) {
             this.returnSelectsToDatabasesInterface();
             try {
-                System.out.println("zaczyna wait w disconnected state");
                 this.dataBaseInstance.getQueryProcesor().wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("after wait");
-
-
     }
 
 

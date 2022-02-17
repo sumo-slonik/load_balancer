@@ -1,5 +1,7 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance.States;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -59,8 +61,6 @@ public class ConnectedState extends DataBaseState {
     public void queryProcessorHandle() {
         Command command;
         synchronized (this.dataBaseInstance.getQueryProcesor()) {
-
-//            System.out.println("before get connected state");
             command = this.dataBaseInstance.getQueryProcesor().getCommand();
             if(command == null){ // interruptException happened or get time took too long
                 return;
@@ -75,40 +75,10 @@ public class ConnectedState extends DataBaseState {
             int transactionResult;
 
             try{
-
-                if(command.queryType.equals(QueryType.INSERT)){
-//                    databaseSession.beginTransaction();
-//                    //Add new Employee object
-//                    String[] insertParameters = command.getCommand().split(",");
-//                    Club club = new Club();
-//                    club.setClubName(insertParameters[0]);
-//                    club.setCity(insertParameters[1]);
-//                    club.setProvince(insertParameters[2]);
-//                    Date date1 = null;
-//                    try {
-//                        date1=new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                    club.setFoundationDate(date1);
-//                    //Save the employee in database
-//                    databaseSession.save(club);
-//
-//                    //Commit the transaction
-//                    databaseSession.getTransaction().commit();
-
-//                    Query query = databaseSession.createSQLQuery(command.getCommand());
-//                    query.executeUpdate();
-
-                    this.handleInsert(command.getCommand(), databaseSession);
-
-
-                }
-                else
                 {
-                    resultQuery = databaseSession.createQuery(command.getCommand());
-                    resultQuery.setCacheable(false);
-                    transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
+                        resultQuery = databaseSession.createSQLQuery(command.getCommand());
+                        resultQuery.setCacheable(false);
+                        transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
                 }
 
 
@@ -119,8 +89,18 @@ public class ConnectedState extends DataBaseState {
 
             if(command.queryType.equals(QueryType.SELECT)){
                 databaseSession.clear();
-                String res = (String) resultQuery.list().stream().map(club -> club.toString()).collect(Collectors.joining("\n"));
+                ObjectMapper mapper = new ObjectMapper();
+                    String res = (String) resultQuery.list().stream().map(club -> {
+                        try {
+                            return mapper.writeValueAsString(club);
+                        } catch (JsonProcessingException e) {
+                            e.printStackTrace();
+                        }
+                        return club.toString();
+                    }).collect(Collectors.joining("\n"));
+
                 command.setResult(res);
+
 
             }
             else{

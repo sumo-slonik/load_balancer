@@ -41,7 +41,7 @@ public class ClientHandler implements Runnable{
                 String[] splitedRequest = request.split(" ");
                 if (splitedRequest.length > 0) {
                     switch (splitedRequest[0]) {
-                        case "FROM":
+                        case "SELECT":
                             System.out.println("obsluga selecta");
                             String res = databasesExecutor.performSelect(request);
                             writer.println(res);

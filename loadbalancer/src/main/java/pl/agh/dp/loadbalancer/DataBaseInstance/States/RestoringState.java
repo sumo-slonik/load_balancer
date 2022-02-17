@@ -77,25 +77,6 @@ public class RestoringState extends DataBaseState {
 
                     try {
                         if(command.queryType.equals(QueryType.INSERT)){
-//                            databaseSession.beginTransaction();
-//                            //Add new Employee object
-//                            String[] insertParameters = command.getCommand().split(",");
-//                            Club club = new Club();
-//                            club.setClubName(insertParameters[0]);
-//                            club.setCity(insertParameters[1]);
-//                            club.setProvince(insertParameters[2]);
-//                            Date date1 = null;
-//                            try {
-//                                date1=new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");
-//                            } catch (ParseException e) {
-//                                e.printStackTrace();
-//                            }
-//                            club.setFoundationDate(date1);
-//                            //Save the employee in database
-//                            databaseSession.save(club);
-//                            //Commit the transaction
-//                            databaseSession.getTransaction().commit();
-
                             this.handleInsert(command.getCommand(), databaseSession);
                         }
                         else
