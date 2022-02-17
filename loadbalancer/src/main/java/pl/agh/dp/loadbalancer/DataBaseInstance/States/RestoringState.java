@@ -76,17 +76,9 @@ public class RestoringState extends DataBaseState {
                     Query resultQuery = null;
 
                     try {
-                        if(command.queryType.equals(QueryType.INSERT)){
-                            this.handleInsert(command.getCommand(), databaseSession);
-                        }
-                        else
-                        {
-                            resultQuery = databaseSession.createQuery(command.getCommand());
-                            resultQuery.setCacheable(false);
-                            int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
-                        }
-
-
+                        resultQuery = databaseSession.createSQLQuery(command.getCommand());
+                        resultQuery.setCacheable(false);
+                        int transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
                     } catch (HibernateException exception) {
                         System.out.println(exception.toString());
                     }
