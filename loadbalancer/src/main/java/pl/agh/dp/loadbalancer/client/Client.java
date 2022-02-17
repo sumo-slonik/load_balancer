@@ -96,8 +96,7 @@ public class Client {
                         System.out.print("where " + columnNames[updateWhereColumnNameInputInt] + "=");
                         String updateWhereInput = updateWhereScanner.nextLine();
 
-                        if (updateSetColumnNameInputInt >= 0 && updateSetColumnNameInputInt < columnNames.length
-                                && updateWhereColumnNameInputInt >= 0 && updateWhereColumnNameInputInt < columnNames.length) {
+                        if (updateSetColumnNameInputInt < columnNames.length && updateWhereColumnNameInputInt < columnNames.length) {
 
                             String updateRequest = requests[1] + " " + columnNames[updateSetColumnNameInputInt] + "=" + updateSetInput + " WHERE " +
                                     columnNames[updateWhereColumnNameInputInt] + "=" + updateWhereInput;
@@ -135,7 +134,7 @@ public class Client {
 
 //                        String insertString = requests[2] + clubName + "," + city +"," + province;
                         String insertString = String.format(
-                                "insert into clubs (club_name, city, foundation_date, club_id, province) values(%s,%s,%s,%d,%s)",
+                                "INSERT INTO CLUBS_TABLE(club_name,city,foundation_date,club_id,province) VALUES('%s','%s','%s',%d,'%s')",
                                 clubName, city, date.toString(), 5, province
                         );
                         System.out.println(insertString);
@@ -163,7 +162,7 @@ public class Client {
                         System.out.print("where " + columnNames[deleteColumnNameInputInt] + "=");
                         String deleteWhereInput = deleteWhereScanner.nextLine();
 
-                        if (deleteColumnNameInputInt >= 0 && deleteColumnNameInputInt < columnNames.length) {
+                        if (deleteColumnNameInputInt < columnNames.length) {
 
                             String deleteRequest = requests[3] + " " + columnNames[deleteColumnNameInputInt] + "=" + deleteWhereInput;
                             System.out.println(deleteRequest);
@@ -226,7 +225,7 @@ public class Client {
                         System.out.print("where " + columnNames[selectWhereColumnNameInputInt] + "=");
                         String selectWhereInput = selectWhereScanner.nextLine();
 
-                        if (selectWhereColumnNameInputInt >= 0 && selectWhereColumnNameInputInt < columnNames.length) {
+                        if (selectWhereColumnNameInputInt < columnNames.length) {
 
                             String selectRequest = requests[7] + " " + columnNames[selectWhereColumnNameInputInt] + "=" + selectWhereInput;
                             System.out.println(selectRequest);
@@ -244,33 +243,39 @@ public class Client {
 
                         insertString = "INSERT INTO CLUB(club_name, city, foundation_date, club_id, province)";
 
-                        for (int i = 0; i < columnNames.length; i++) {
-                            System.out.println(i + "-" + columnNames[i]);
-                        }
+//                        Scanner insert2ClubName = new Scanner(System.in);
+//                        System.out.print("Club name: ");
+//                        String club2Name = insert2ClubName.nextLine();
+//
+//                        Scanner insert2City = new Scanner(System.in);
+//                        System.out.print("City: ");
+//                        String city2 = insert2City.nextLine();
+//
+//                        Scanner insert2Province = new Scanner(System.in);
+//                        System.out.print("Province: ");
+//                        String province2 = insert2Province.nextLine();
+//
+//                        Date date2 = null;
+//                        try {
+//                            date = new SimpleDateFormat("yyyy-mm-dd").parse("2022-02-02");
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+//
+////                        String insertString = requests[2] + clubName + "," + city +"," + province;
+//                        String insertString = String.format(
+//                                "insert into clubs (club_name, city, foundation_date, club_id, province) values(%s,%s,%s,%d,%s)",
+//                                clubName, city, date.toString(), 5, province
+//                        );
+//                        System.out.println(insertString);
+//
+//                        writer.println(insertString);
+//                        InputStream insertInput = socket.getInputStream();
+//                        BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertInput));
+//
+//                        getOutput(insertReader);
 
-                        selectColumnNameScanner = new Scanner(System.in);
-                        System.out.println("Where column");
-                        System.out.print("Enter a number: ");
-                        selectWhereColumnNameInput = selectColumnNameScanner.nextLine();
 
-                        selectWhereColumnNameInputInt = Integer.parseInt(selectWhereColumnNameInput);
-
-                        System.out.println("where:");
-                        selectWhereScanner = new Scanner(System.in);
-                        System.out.print("where " + columnNames[selectWhereColumnNameInputInt] + "=");
-                        selectWhereInput = selectWhereScanner.nextLine();
-
-                        if (selectWhereColumnNameInputInt >= 0 && selectWhereColumnNameInputInt < columnNames.length) {
-
-                            insertString += requests[7] + " " + columnNames[selectWhereColumnNameInputInt] + "=" + selectWhereInput;
-
-                            writer.println(insertString);
-                            insertInput = socket.getInputStream();
-                            insertReader = new BufferedReader(new InputStreamReader(insertInput));
-
-                            getOutput(insertReader);
-
-                        }
                         break;
 
 
