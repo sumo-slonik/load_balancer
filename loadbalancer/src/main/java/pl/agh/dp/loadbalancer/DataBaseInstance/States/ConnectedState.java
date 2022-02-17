@@ -97,8 +97,10 @@ public class ConnectedState extends DataBaseState {
 //                    //Commit the transaction
 //                    databaseSession.getTransaction().commit();
 
-                    Query query = databaseSession.createSQLQuery(command.getCommand());
-                    query.executeUpdate();
+//                    Query query = databaseSession.createSQLQuery(command.getCommand());
+//                    query.executeUpdate();
+
+                    this.handleInsert(command.getCommand(), databaseSession);
 
 
                 }

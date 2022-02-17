@@ -1,7 +1,10 @@
 package pl.agh.dp.loadbalancer.DataBaseInstance.States;
 
 
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import pl.agh.dp.loadbalancer.DataBaseInstance.DataBaseInstance;
+
 
 public abstract class DataBaseState {
 
@@ -10,7 +13,31 @@ public abstract class DataBaseState {
     public abstract DataBaseStates getState();
     public abstract boolean isConnected();
     public abstract void queryProcessorHandle();
-//    public abstract void notifyQueryProcessor();
+
+    public void handleInsert(String insertQuery, Session databaseSession){
+
+        if(! insertQuery.toLowerCase().startsWith("insert")){
+            return;
+        }
+
+        Query query;
+
+        if(insertQuery.toLowerCase().contains("values")){ // insert into values case
+            query = databaseSession.createSQLQuery(insertQuery);
+
+        } else if(insertQuery.toLowerCase().contains("select") ) { // insert into ... select ... case
+            query = databaseSession.createQuery(insertQuery);
+
+        }
+        else{
+            return;
+        }
+
+        if(query !=  null)
+            query.executeUpdate();
+
+
+    }
 
 
 }
