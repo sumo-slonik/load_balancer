@@ -82,8 +82,6 @@ public class RestoringState extends DataBaseState {
                     } catch (HibernateException exception) {
                         System.out.println(exception.toString());
                     }
-
-
                 } else {
                     command.setResult("select failed");
                     command.notify();

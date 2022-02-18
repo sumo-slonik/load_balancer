@@ -90,13 +90,13 @@ public class ConnectedState extends DataBaseState {
             if(command.queryType.equals(QueryType.SELECT)){
                 databaseSession.clear();
                 ObjectMapper mapper = new ObjectMapper();
-                    String res = (String) resultQuery.list().stream().map(club -> {
+                    String res = (String) resultQuery.list().stream().map(obj -> {
                         try {
-                            return mapper.writeValueAsString(club);
+                            return mapper.writeValueAsString(obj);
                         } catch (JsonProcessingException e) {
                             e.printStackTrace();
                         }
-                        return club.toString();
+                        return obj.toString();
                     }).collect(Collectors.joining("\n"));
 
                 command.setResult(res);
