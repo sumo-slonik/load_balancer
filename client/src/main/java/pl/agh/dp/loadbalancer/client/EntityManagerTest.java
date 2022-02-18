@@ -1,5 +1,10 @@
 package pl.agh.dp.loadbalancer.client;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import pl.agh.dp.loadbalancer.Employee.EmployeeEntity;
 
 import javax.persistence.EntityManager;
@@ -9,6 +14,7 @@ import javax.persistence.Persistence;
 public class EntityManagerTest {
 
     public void test() {
+
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Employee");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
