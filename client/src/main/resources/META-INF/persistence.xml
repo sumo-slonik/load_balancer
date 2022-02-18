@@ -5,7 +5,7 @@
 
     <persistence-unit name="Employee" transaction-type="RESOURCE_LOCAL">
 
-        <class>com.test.jpa.EmployeeEntity</class>
+        <class>pl.agh.dp.loadbalancer.Employee.EmployeeEntity</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
             <property name="javax.persistence.jdbc.url"    value="jdbc:h2:tcp://localhost:9099/mem:mydb" />
@@ -13,7 +13,7 @@
             <property name="javax.persistence.jdbc.password" value="" />
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="show_sql" value="true"/>
             <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
         </properties>

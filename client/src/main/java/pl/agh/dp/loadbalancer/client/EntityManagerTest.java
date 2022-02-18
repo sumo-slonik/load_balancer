@@ -22,10 +22,9 @@ public class EntityManagerTest {
         entityManager.getTransaction().begin();
 
         EmployeeEntity employee = new EmployeeEntity();
-        employee.setFirstName("Pankaj");
-        employee.setLastName("Dam");
+        employee.setFirstName("Ahmed");
+        employee.setLastName("Sam");
         System.out.println("Saving Employee to Database");
-
 
         entityManager.persist(employee);
         entityManager.getTransaction().commit();
