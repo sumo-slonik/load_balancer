@@ -3,6 +3,7 @@ package pl.agh.dp.loadbalancer.client;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.SessionFactoryBuilder;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
@@ -23,7 +24,8 @@ public class HibernateUtil {
                 Metadata metadata = sources.getMetadataBuilder().build();
 
                 // Create SessionFactory
-                sessionFactory = metadata.getSessionFactoryBuilder().build();
+                SessionFactoryBuilder sessionFactoryBuilder = metadata.getSessionFactoryBuilder();
+                sessionFactory = sessionFactoryBuilder.build();
 
             } catch (Exception e) {
                 e.printStackTrace();

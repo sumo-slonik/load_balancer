@@ -1,65 +1,116 @@
 package pl.agh.dp.loadbalancer.client;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import pl.agh.dp.loadbalancer.Club.ClubEntity;
+import pl.agh.dp.loadbalancer.Employee.EmployeeEntity;
 
 import javax.annotation.PostConstruct;
+import java.io.*;
+import java.net.Socket;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class Client {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    static String[] requests = {"SELECT *", "INSERT", "DELETE"};
+    Socket socket;
 
     @PostConstruct
-    private void initDb() {
+    private void initDb() throws IOException {
+
+        String hostname = "localhost";
+        int port = 9090;
+
+        System.out.println("wybierz liczbe by wykonac nastepujaca operacje");
+        System.out.println("0 - " + requests[0]);
+        System.out.println("1 - " + requests[1]);
+        System.out.println("2 - " + requests[2]);
+        System.out.println("lub wpisz 'disconnect' by zakonczyc");
+
+        socket = new Socket(hostname, port);
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
+
+            OutputStream output = socket.getOutputStream();
+            PrintWriter writer = new PrintWriter(output, true);
+
+        QueryInterceptor<EmployeeEntity> interceptor = new QueryInterceptor<EmployeeEntity>(socket, writer);
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.withOptions().interceptor(interceptor).openSession();
 
 
-//        System.out.println("****** Inserting more sample data in the table: Employees ******");
-//        String sqlStatements[] = {
-//                "insert into employees(first_name, last_name) values('Donald','Trump')",
-//                "insert into employees(first_name, last_name) values('Barack','Obama')"
-//        };
-//
-//        Arrays.asList(sqlStatements).stream().forEach(sql -> {
-//            System.out.println(sql);
-//            jdbcTemplate.execute(sql);
-//        });
+            String text;
 
-        System.out.println("****** PM part ******");
-        EntityManagerTest entityTest = new EntityManagerTest();
-        entityTest.test();
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Enter a string: ");
+            text = sc.nextLine();
+            while (!text.equals("disconnect")) {
 
-        System.out.println("****** Session part ******");
-        TestApp testApp = new TestApp();
-        testApp.test();
+                switch (text) {
+                    case "0":
 
-//        System.out.println(String.format("****** Fetching from table: %s ******", "Employees"));
-//        jdbcTemplate.query("select id,first_name,last_name from employees",
-//                new RowMapper<Object>() {
-//                    @Override
-//                    public Object mapRow(ResultSet rs, int i) throws SQLException {
-//                        System.out.println(String.format("id:%s,first_name:%s,last_name:%s",
-//                                rs.getString("id"),
-//                                rs.getString("first_name"),
-//                                rs.getString("last_name")));
-//                        return null;
-//                    }
-//                });
+                        List< EmployeeEntity > employees = session.createQuery("from EmployeeEntity", EmployeeEntity.class).list();
+                        employees.forEach(e -> System.out.println(e.getFirstName()));
+
+                        InputStream selectAllInput = socket.getInputStream();
+                        BufferedReader selectAllReader = new BufferedReader(new InputStreamReader(selectAllInput));
+
+                        getOutput(selectAllReader);
+
+                        break;
+                    case "1":
+
+                        ClubEntity club1 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
+                        session.save(club1);
+
+                        break;
+                    case "2":
+
+                        ClubEntity club2 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
+                        session.delete(club2);
+
+                        break;
+
+                }
+
+                System.out.print("Enter a string: ");
+                text = sc.nextLine();
+            }
+
+            socket.close();
+
+    }
+
+    private static void getOutput(BufferedReader reader) throws IOException {
+
+        String selectLine;
+        selectLine = reader.readLine();
+        while (!selectLine.equals("streamEndedSeq")) {
+            System.out.println(selectLine);
+            selectLine = reader.readLine();
+        }
     }
 
     public static void main(String[] args) {
-
-        System.out.println("****** Client start ******");
         SpringApplication.run(Client.class, args);
-
-
     }
 
 }

@@ -1,6 +1,8 @@
 package pl.agh.dp.loadbalancer.RequestServer;
 
+import com.sun.net.httpserver.HttpServer;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import pl.agh.dp.loadbalancer.DataBasesInterface.DatabasesInterface;
@@ -34,6 +36,7 @@ public class RequestServer {
             this.databasesExecutor = databasesExecutor;
         }
 
+        @SneakyThrows
         @Override
         public void run() {
             int port = 9090;

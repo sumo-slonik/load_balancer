@@ -35,7 +35,7 @@ public class ClientHandler implements Runnable{
 
             request = reader.readLine();
             while (request != null && !request.equals("disconnect")) {
-                System.out.println(request);
+                System.out.println("CLIENT QUERY: " + request);
 
                 // Tu obsluga zapytania
                 String[] splitedRequest = request.split(" ");

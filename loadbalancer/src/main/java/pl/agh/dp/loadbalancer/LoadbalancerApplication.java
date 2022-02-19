@@ -32,7 +32,6 @@ public class LoadbalancerApplication {
         System.out.println("kuba");
     }
 
-
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server inMemoryH2DatabaseaServer() throws SQLException, SQLException {
         return Server.createTcpServer(
