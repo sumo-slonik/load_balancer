@@ -76,6 +76,27 @@ public class ConnectedState extends DataBaseState {
 
             try{
                 {
+                    if(command.queryType.equals(QueryType.INSERT)){
+//                        String sql = command.getCommand();
+//                        String fields = sql.substring(sql.indexOf('(')+1, sql.indexOf(')'));
+//                        String[] fieldNames = fields.split(", ");
+//                        String tableName = sql.split(" ")[2];
+//                        System.out.println(Arrays.toString(fieldNames));
+//
+//                        String createSQL = "CREATE TABLE "+ tableName + " (\n" +
+//                                "  id INT NOT NULL AUTO_INCREMENT,\n";
+//
+//                        for (String fieldName: fieldNames) {
+//                            createSQL += "" + fieldName + "" + " VARCHAR(45) NULL,\n";
+//                        }
+//                        createSQL +=
+//                                "  PRIMARY KEY (id),\n" +
+//                                "  UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE);";
+//
+//                        System.out.println(createSQL);
+//                        databaseSession.createSQLQuery(createSQL);
+                    }
+
                         resultQuery = databaseSession.createSQLQuery(command.getCommand());
                         resultQuery.setCacheable(false);
                         transactionResult = command.handleQueryParameters(resultQuery, databaseSession);
@@ -83,7 +104,7 @@ public class ConnectedState extends DataBaseState {
 
 
             } catch (HibernateException exception){
-                System.out.println(exception.toString());
+                System.out.println(exception.toString() + exception.getMessage());
             }
 
 

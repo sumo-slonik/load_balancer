@@ -1,8 +1,13 @@
 package pl.agh.dp.loadbalancer.Employee;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "EmployeeEntity")
+@Getter
+@Setter
 @Table(name = "Employees")
 public class EmployeeEntity {
     @Id
@@ -16,6 +21,14 @@ public class EmployeeEntity {
     @Column(name = "last_name", nullable = false)
     private String last_name;
 
+    public EmployeeEntity() {
+    }
+
+    public EmployeeEntity(Long id, String first_name, String last_name){
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+    }
 
     public String getFirstName() {
         return first_name;

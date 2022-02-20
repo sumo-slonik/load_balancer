@@ -24,7 +24,7 @@ import java.util.Scanner;
 @SpringBootApplication
 public class Client {
 
-    static String[] requests = {"SELECT *", "INSERT", "DELETE"};
+    static String[] requests = {"SELECT *", "INSERT", "INSERT reczny", "DELETE", "DELETE reczny", "MinLoad", "RoundRobin", "Description"};
     Socket socket;
 
     @PostConstruct
@@ -67,8 +67,10 @@ public class Client {
                 switch (text) {
                     case "0":
 
-                        List< EmployeeEntity > employees = session.createQuery("from EmployeeEntity", EmployeeEntity.class).list();
-                        employees.forEach(e -> System.out.println(e.getFirstName()));
+//                        ClubEntity club0 = session.get(ClubEntity.class, 32L);
+
+                        List< ClubEntity > employees = session.createQuery("from ClubEntity", ClubEntity.class).list();
+                        employees.forEach(e -> System.out.println(e.getClub_name()));
 
                         InputStream selectAllInput = socket.getInputStream();
                         BufferedReader selectAllReader = new BufferedReader(new InputStreamReader(selectAllInput));
@@ -80,12 +82,18 @@ public class Client {
 
                         ClubEntity club1 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
                         session.save(club1);
+//                        EmployeeEntity empl1 = new EmployeeEntity(1L, "Jan", "Kowalski");
+//                        session.save(empl1);
 
                         break;
                     case "2":
 
                         ClubEntity club2 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
                         session.delete(club2);
+
+                        break;
+
+                    case "3":
 
                         break;
 
