@@ -24,7 +24,7 @@ import java.util.Scanner;
 @SpringBootApplication
 public class Client {
 
-    static String[] requests = {"SELECT *", "INSERT", "INSERT reczny", "DELETE", "DELETE reczny", "MinLoad", "RoundRobin", "Description"};
+    static String[] requests = {"SELECT *", "INSERT", "DELETE", "MinLoad", "RoundRobin", "Description"};
     Socket socket;
 
     @PostConstruct
@@ -37,6 +37,9 @@ public class Client {
         System.out.println("0 - " + requests[0]);
         System.out.println("1 - " + requests[1]);
         System.out.println("2 - " + requests[2]);
+        System.out.println("3 - " + requests[3]);
+        System.out.println("4 - " + requests[4]);
+        System.out.println("5 - " + requests[5]);
         System.out.println("lub wpisz 'disconnect' by zakonczyc");
 
         socket = new Socket(hostname, port);
@@ -67,8 +70,6 @@ public class Client {
                 switch (text) {
                     case "0":
 
-//                        ClubEntity club0 = session.get(ClubEntity.class, 32L);
-
                         List< ClubEntity > employees = session.createQuery("from ClubEntity", ClubEntity.class).list();
                         employees.forEach(e -> System.out.println(e.getClub_name()));
 
@@ -94,7 +95,14 @@ public class Client {
                         break;
 
                     case "3":
-
+                    case "4":
+                    case "5":
+                        String RQ = requests[Integer.parseInt(text)];
+                        System.out.println(RQ);
+                        writer.println(RQ);
+                        InputStream changeStrategy1 = socket.getInputStream();
+                        BufferedReader changeStrategyRender1 = new BufferedReader(new InputStreamReader(changeStrategy1));
+                        getOutput(changeStrategyRender1);
                         break;
 
                 }

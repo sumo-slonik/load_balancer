@@ -6,6 +6,8 @@
     <persistence-unit name="Club" transaction-type="RESOURCE_LOCAL">
 
         <class>pl.agh.dp.loadbalancer.Club.ClubEntity</class>
+        <class>pl.agh.dp.loadbalancer.Employee.EmployeeEntity</class>
+
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
             <property name="javax.persistence.jdbc.url"    value="jdbc:h2:tcp://localhost:9099/mem:mydb" />
