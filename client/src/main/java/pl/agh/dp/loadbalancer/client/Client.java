@@ -15,9 +15,6 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.Socket;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,90 +25,76 @@ public class Client {
     Socket socket;
 
     @PostConstruct
-    private void initDb() throws IOException {
+    private void clientLoop() throws IOException {
 
-        String hostname = "localhost";
-        int port = 9090;
-
-        System.out.println("wybierz liczbe by wykonac nastepujaca operacje");
+        System.out.println("Wybierz liczbe by wykonac nastepujaca operacje:");
         System.out.println("0 - " + requests[0]);
         System.out.println("1 - " + requests[1]);
         System.out.println("2 - " + requests[2]);
         System.out.println("3 - " + requests[3]);
         System.out.println("4 - " + requests[4]);
         System.out.println("5 - " + requests[5]);
-        System.out.println("lub wpisz 'disconnect' by zakonczyc");
+        System.out.println("Lub wpisz 'disconnect' by zakonczyc");
 
-        socket = new Socket(hostname, port);
+        // Creating session and the associated socket
+        CustomSession session = HibernateUtil.getSession();
+        socket = session.getSocket();
 
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }));
+        OutputStream output = socket.getOutputStream();
+        PrintWriter writer = new PrintWriter(output, true);
 
-            OutputStream output = socket.getOutputStream();
-            PrintWriter writer = new PrintWriter(output, true);
+        // Menu handling
+        String text;
 
-        QueryInterceptor<EmployeeEntity> interceptor = new QueryInterceptor<EmployeeEntity>(socket, writer);
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.withOptions().interceptor(interceptor).openSession();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        text = sc.nextLine();
+        while (!text.equals("disconnect")) {
 
+            switch (text) {
+                case "0":
+                    // SELECT
 
-            String text;
+                    List<ClubEntity> results = session.findAll(ClubEntity.class);
 
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Enter a string: ");
-            text = sc.nextLine();
-            while (!text.equals("disconnect")) {
+                    break;
+                case "1":
+                    // INSERT
 
-                switch (text) {
-                    case "0":
+                    ClubEntity club1 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
+                    session.save(club1);
+//                  EmployeeEntity empl1 = new EmployeeEntity(1L, "Jan", "Kowalski");
+//                  session.save(empl1);
 
-                        List< ClubEntity > employees = session.createQuery("from ClubEntity", ClubEntity.class).list();
-                        employees.forEach(e -> System.out.println(e.getClub_name()));
+                    break;
+                case "2":
+                    // DELETE
 
-                        InputStream selectAllInput = socket.getInputStream();
-                        BufferedReader selectAllReader = new BufferedReader(new InputStreamReader(selectAllInput));
+                    ClubEntity club2 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
+                    session.delete(club2);
 
-                        getOutput(selectAllReader);
+                    break;
 
-                        break;
-                    case "1":
+                case "3":
+                case "4":
+                case "5":
+                    // DB modes
 
-                        ClubEntity club1 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
-                        session.save(club1);
-//                        EmployeeEntity empl1 = new EmployeeEntity(1L, "Jan", "Kowalski");
-//                        session.save(empl1);
+                    String request = requests[Integer.parseInt(text)];
+                    System.out.println(request);
+                    writer.println(request);
+                    InputStream input = socket.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                    getOutput(reader);
+                    break;
 
-                        break;
-                    case "2":
-
-                        ClubEntity club2 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
-                        session.delete(club2);
-
-                        break;
-
-                    case "3":
-                    case "4":
-                    case "5":
-                        String RQ = requests[Integer.parseInt(text)];
-                        System.out.println(RQ);
-                        writer.println(RQ);
-                        InputStream changeStrategy1 = socket.getInputStream();
-                        BufferedReader changeStrategyRender1 = new BufferedReader(new InputStreamReader(changeStrategy1));
-                        getOutput(changeStrategyRender1);
-                        break;
-
-                }
-
-                System.out.print("Enter a string: ");
-                text = sc.nextLine();
             }
 
-            socket.close();
+            System.out.print("Enter a string: ");
+            text = sc.nextLine();
+        }
+
+        socket.close();
 
     }
 
