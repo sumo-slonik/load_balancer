@@ -7,6 +7,7 @@ import org.hibernate.type.Type;
 import javax.persistence.Table;
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Date;
 
 public class QueryInterceptor extends EmptyInterceptor {
