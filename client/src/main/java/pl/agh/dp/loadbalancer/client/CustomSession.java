@@ -2,6 +2,8 @@ package pl.agh.dp.loadbalancer.client;
 
 import com.google.gson.Gson;
 import org.hibernate.Session;
+
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.*;
 import java.lang.reflect.Field;
@@ -39,22 +41,19 @@ public class CustomSession {
 
         String query = "SELECT * FROM " + entityClass.getAnnotation(Table.class).name();
 
-        ArrayList<String> columns = new ArrayList<String>();
-        ArrayList<Class> types = new ArrayList<>();
+        List<String> idColumns = new ArrayList<String>();
+        List<String> columns = new ArrayList<String>();
+        for(Field el : entityClass.getDeclaredFields()) {
+                   if(!el.isAnnotationPresent(Id.class)) columns.add(el.toString().split(entityClass.getName()+".")[1]);
+                   else idColumns.add(el.toString().split(entityClass.getName()+".")[1]);
+                }
 
-        Arrays.stream(entityClass.getDeclaredFields()).forEach(el -> columns.add(el.toString().split(entityClass.getName()+".")[1]));
 
-//        Arrays.stream(entityClass.getDeclaredFields()).forEach(el -> types.add(el.toString().split(entityClass.getName()+".")[0]));
-//        Arrays.stream(entityClass.getDeclaredFields()).(el -> types.add(el.toString().split(entityClass.getName()+".")[0].strip().split(".")[2]));
-        Arrays.stream(entityClass.getDeclaredFields()).forEach(el -> types.add(el.getType()));
+        columns = columns.stream().sorted().collect(Collectors.toList());
 
-        System.out.println(types.get(0).getTypeName());
-
-        System.out.println(query);
         writer.println(query);
 
         String response = getSocketOutput();
-        System.out.println(response);
 
         List<T> result = new ArrayList<>();
 
@@ -62,7 +61,6 @@ public class CustomSession {
 
         Arrays.stream(response.split("\n")).forEach(el -> responseArray.add(el.substring(1,el.length() -1 )));
 
-        System.out.println(responseArray);
 
         for(String s : responseArray){
             String[] parsedObject = s.split(",");
@@ -88,7 +86,6 @@ public class CustomSession {
 
         // THIS IS WHERE WE MAP
         // the response onto entities and populate the list
-        System.out.println(result);
         return result;
     }
 

@@ -56,12 +56,13 @@ public class Client {
                     // SELECT
 
                     List<ClubEntity> results = session.findAll(ClubEntity.class);
+                    System.out.println(results);
 
                     break;
                 case "1":
                     // INSERT
 
-                    ClubEntity club1 = new ClubEntity("klub1", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
+                    ClubEntity club1 = new ClubEntity("klub3", "Sosnowiec3", Date.valueOf("1997-03-10"), 1324L, "asd");
                     session.save(club1);
 //                  EmployeeEntity empl1 = new EmployeeEntity(1L, "Jan", "Kowalski");
 //                  session.save(empl1);
