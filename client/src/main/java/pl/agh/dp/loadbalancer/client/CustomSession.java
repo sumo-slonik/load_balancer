@@ -1,11 +1,17 @@
 package pl.agh.dp.loadbalancer.client;
 
+import com.google.gson.Gson;
 import org.hibernate.Session;
+
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CustomSession {
 
@@ -36,17 +42,63 @@ public class CustomSession {
 
         String query = "SELECT * FROM " + entityClass.getAnnotation(Table.class).name();
 
-        System.out.println(query);
+        List<String> idColumns = new ArrayList<String>();
+        List<String> columns = new ArrayList<String>();
+        for(Field el : entityClass.getDeclaredFields()) {
+                   if(!el.isAnnotationPresent(Id.class)) columns.add(el.toString().split(entityClass.getName()+".")[1]);
+                   else idColumns.add(el.toString().split(entityClass.getName()+".")[1]);
+                }
+
+
+        columns = columns.stream().sorted().collect(Collectors.toList());
+
         writer.println(query);
 
         String response = getSocketOutput();
-        System.out.println(response);
 
         List<T> result = new ArrayList<>();
 
+        ArrayList<String> responseArray = new ArrayList<String>();
+
+        Arrays.stream(response.split("\n")).forEach(el -> responseArray.add(el.substring(1,el.length() -1 )));
+
+
+        for(String s : responseArray){
+            String[] parsedObject = s.split(",");
+            StringBuilder entityObjAsJson = new StringBuilder("{");
+
+            int parsedObjectIndex = 0;
+
+            for(int k=0; k<idColumns.size(); k++ ,parsedObjectIndex++){
+
+                entityObjAsJson.append("\"").append(idColumns.get(k)).append("\": \"").append(parsedObject[parsedObjectIndex]);
+
+                if(parsedObjectIndex != parsedObject.length - 1)
+                    entityObjAsJson.append("\",");
+                else
+                    entityObjAsJson.append("\"");
+            }
+
+            for(int i=0; i<columns.size() ;i++ ,parsedObjectIndex++){
+
+                entityObjAsJson.append("\"").append(columns.get(i)).append("\": \"").append(parsedObject[parsedObjectIndex]);
+
+                if(parsedObjectIndex != parsedObject.length - 1)
+                    entityObjAsJson.append("\",");
+                else
+                    entityObjAsJson.append("\"");
+            }
+
+            entityObjAsJson.append("}");
+
+            Gson gson = new Gson();
+            T added = gson.fromJson(entityObjAsJson.toString().replace("\"\"", "\""), entityClass);
+            result.add(added);
+
+        }
+
         // THIS IS WHERE WE MAP
         // the response onto entities and populate the list
-
         return result;
     }
 

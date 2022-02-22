@@ -64,7 +64,9 @@ public class ClubEntity {
     public String toString() {
         return "Club{" +
                 "clubName='" + club_name + '\'' +
+                ", date='" + foundation_date + '\'' +
                 ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
                 '}';
     }
 
