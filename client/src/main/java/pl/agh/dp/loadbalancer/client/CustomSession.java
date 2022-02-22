@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CustomSession {
 
@@ -65,12 +66,24 @@ public class CustomSession {
         for(String s : responseArray){
             String[] parsedObject = s.split(",");
             StringBuilder entityObjAsJson = new StringBuilder("{");
-            for(int i=0; i<parsedObject.length ;i++){
-                System.out.println(parsedObject[i]+" "+columns.get(i));
 
-                entityObjAsJson.append("\"").append(columns.get(i)).append("\": \"").append(parsedObject[i]);
+            int parsedObjectIndex = 0;
 
-                if(i != parsedObject.length - 1)
+            for(int k=0; k<idColumns.size(); k++ ,parsedObjectIndex++){
+
+                entityObjAsJson.append("\"").append(idColumns.get(k)).append("\": \"").append(parsedObject[parsedObjectIndex]);
+
+                if(parsedObjectIndex != parsedObject.length - 1)
+                    entityObjAsJson.append("\",");
+                else
+                    entityObjAsJson.append("\"");
+            }
+
+            for(int i=0; i<columns.size() ;i++ ,parsedObjectIndex++){
+
+                entityObjAsJson.append("\"").append(columns.get(i)).append("\": \"").append(parsedObject[parsedObjectIndex]);
+
+                if(parsedObjectIndex != parsedObject.length - 1)
                     entityObjAsJson.append("\",");
                 else
                     entityObjAsJson.append("\"");
