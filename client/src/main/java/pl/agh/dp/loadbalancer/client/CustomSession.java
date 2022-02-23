@@ -34,10 +34,12 @@ public class CustomSession {
 
     public void save(Object o) {
         session.save(o);
+        session.clear();
     }
 
     public void delete(Object o) {
         session.delete(o);
+        session.clear();
     }
 
     public void update(Object o) throws IOException {
@@ -79,6 +81,7 @@ public class CustomSession {
 
         // Clear
         getSocketOutput();
+        session.clear();
     }
 
     public <T> List<T> findAll(Class<T> entityClass) throws IOException {

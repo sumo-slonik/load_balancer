@@ -72,7 +72,7 @@ public class Client {
                 case "2":
                     // DELETE
 
-                    ClubEntity club2 = new ClubEntity("Polska", "Sosnowiec", Date.valueOf("1997-03-10"), 1324L, "Slaskie");
+                    ClubEntity club2 = new ClubEntity("klub3", "Sosnowiec3", Date.valueOf("1997-03-10"), 1324L, "asd");
                     session.delete(club2);
 
                     break;

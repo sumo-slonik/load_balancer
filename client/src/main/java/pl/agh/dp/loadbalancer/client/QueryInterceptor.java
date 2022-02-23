@@ -4,11 +4,15 @@ import lombok.SneakyThrows;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 
+import javax.persistence.Column;
 import javax.persistence.Table;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class QueryInterceptor extends EmptyInterceptor {
 
@@ -30,7 +34,15 @@ public class QueryInterceptor extends EmptyInterceptor {
         String query = "INSERT INTO ";
         query += entity.getClass().getAnnotation(Table.class).name();
         query += " (";
-        query += String.join(", ", propertyNames);
+
+        Field[] fields = entity.getClass().getDeclaredFields();
+
+        String[] columnNames = new String[propertyNames.length];
+        for(int i = 0; i < propertyNames.length; i++){
+            columnNames[i] = entity.getClass().getDeclaredField(propertyNames[i]).getAnnotation(Column.class).name();
+        }
+
+        query += String.join(", ", columnNames);
         query += ") VALUES (";
         for(int i = 0; i < state.length-1; i++){
             query += "'" + state[i].toString() + "', ";
@@ -59,7 +71,7 @@ public class QueryInterceptor extends EmptyInterceptor {
             if(state[i].getClass() == Date.class){
                 //System.out.println("skip date");
             }else{
-                query += propertyNames[i] + "='" + state[i].toString() + "' AND ";
+                query += entity.getClass().getDeclaredField(propertyNames[i]).getAnnotation(Column.class).name() + "='" + state[i].toString() + "' AND ";
             }
         }
         query += propertyNames[state.length-1] + "='" + state[state.length-1].toString() + "'";
