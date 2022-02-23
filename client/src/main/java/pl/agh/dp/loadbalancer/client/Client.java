@@ -21,7 +21,7 @@ import java.util.Scanner;
 @SpringBootApplication
 public class Client {
 
-    static String[] requests = {"SELECT *", "INSERT", "DELETE", "MinLoad", "RoundRobin", "Description"};
+    static String[] requests = {"SELECT *", "INSERT", "DELETE", "UPDATE", "MinLoad", "RoundRobin", "Description"};
     Socket socket;
 
     @PostConstruct
@@ -34,6 +34,7 @@ public class Client {
         System.out.println("3 - " + requests[3]);
         System.out.println("4 - " + requests[4]);
         System.out.println("5 - " + requests[5]);
+        System.out.println("6 - " + requests[6]);
         System.out.println("Lub wpisz 'disconnect' by zakonczyc");
 
         // Creating session and the associated socket
@@ -77,8 +78,16 @@ public class Client {
                     break;
 
                 case "3":
+                    // UPDATE
+
+                    ClubEntity club3 = new ClubEntity("Kkkk", "Warszawa", Date.valueOf("1997-03-11"), 33L, "Slaskie");
+                    session.update(club3);
+
+                    break;
+
                 case "4":
                 case "5":
+                case "6":
                     // DB modes
 
                     String request = requests[Integer.parseInt(text)];

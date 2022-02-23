@@ -1,8 +1,10 @@
 package pl.agh.dp.loadbalancer.client;
 
 import com.google.gson.Gson;
+import lombok.SneakyThrows;
 import org.hibernate.Session;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.*;
@@ -36,6 +38,47 @@ public class CustomSession {
 
     public void delete(Object o) {
         session.delete(o);
+    }
+
+    public void update(Object o) throws IOException {
+
+        String idColumnName = "";
+        Long idValue = -1L;
+        String tableName = o.getClass().getAnnotation(Table.class).name();
+
+        List<String> columns = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+
+        Field[] fields = o.getClass().getDeclaredFields();
+
+        for ( Field field : fields  ) {
+            field.setAccessible(true);
+            try {
+                if(field.isAnnotationPresent(Id.class)){
+                    idColumnName = field.getAnnotation(Column.class).name();
+                    idValue = Long.parseLong(field.get(o).toString());
+                }else{
+                    columns.add( field.getAnnotation(Column.class).name() );
+                    values.add( field.get(o).toString() );
+                }
+            } catch ( IllegalAccessException ex ) {
+                System.out.println(ex);
+            }
+        }
+
+        String request = "UPDATE " + tableName + " SET ";
+        for(int i = 0; i < columns.size()-1; i++){
+            request += columns.get(i) + " = '" + values.get(i) + "', ";
+        }
+        request += columns.get(columns.size()-1) + " = '" + values.get(columns.size()-1) + "'";
+
+        request += " WHERE " + idColumnName + " = " + idValue;
+
+        System.out.println(request);
+        writer.println(request);
+
+        // Clear
+        getSocketOutput();
     }
 
     public <T> List<T> findAll(Class<T> entityClass) throws IOException {
@@ -97,8 +140,6 @@ public class CustomSession {
 
         }
 
-        // THIS IS WHERE WE MAP
-        // the response onto entities and populate the list
         return result;
     }
 
